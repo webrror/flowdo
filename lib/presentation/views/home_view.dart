@@ -85,12 +85,12 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        elevation: 2,
         shape: const CircleBorder(),
         clipBehavior: Clip.antiAlias,
         onPressed: () {},
         backgroundColor: Colors.transparent,
         child: ClipRRect(
-
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 50.0, sigmaY: 50.0, tileMode: TileMode.clamp),
             child: Container(
