@@ -45,8 +45,8 @@ class _RandomPositionedWidgetState extends State<RandomPositionedWidget> {
         top: top,
         left: left,
         child: SizedBox(
-          width: 450,
-          height: 450,
+          width: 500,
+          height: 500,
           child: ScalableImageWidget(
             si: scalableImage!,
           ),

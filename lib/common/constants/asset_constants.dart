@@ -1,6 +1,5 @@
 class AssetConstants {
   // SVGs
-
   // Blobs
   static const blob0 = "assets/svgs/blob0.svg";
   static const blob1 = "assets/svgs/blob1.svg";

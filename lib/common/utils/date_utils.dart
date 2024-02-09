@@ -13,28 +13,6 @@ class FLDateFormatter {
   /// Provide method with raw date in String format, the input format (defaults to `DateFormats.isoFormatUTC` format) and the output format.
   ///
   /// Method outputs a String with the entered output format
-  // String? customDateTime({
-  //   required String inputFromApiString,
-  //   DateTime? inputFromApiDatetime,
-  //   String inputFormat = DateTimeFormats.isoFormatLocal,
-  //   required String outputFormat,
-  // }) {
-  //   try {
-  //     if (inputFromApiDatetime != null) {
-  //       return DateFormat(outputFormat).format(inputFromApiDatetime).toString();
-  //     } else {
-  //       if (inputFromApiString.trim().isEmpty) {
-  //         throw Exception("Input date should not be empty");
-  //       }
-  //       DateTime temp = DateFormat(inputFormat).parse(inputFromApiString);
-  //       return DateFormat(outputFormat).format(temp).toString();
-  //     }
-  //   } catch (e) {
-  //     debugPrint("ERROR :: FLDateFormatter :: customDateTime() :: ${e.toString()}");
-  //     throw Exception(e);
-  //   }
-  // }
-
   String customDateTime({
     required String inputString,
     DateTime? inputDatetime,
