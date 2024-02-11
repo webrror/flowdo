@@ -260,13 +260,13 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
     showGlassBottomSheet(
       context,
       maxHeight: getScreenHeight(context) * (kIsWeb ? 0.56 : 0.51),
-      minHeight: getScreenHeight(context) * (kIsWeb ? 0.56 : 0.51),
       sheetTitle: Strings.settings,
       buildSheet: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 25),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
               const Text(
                 Strings.theme,
@@ -370,6 +370,12 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
                   fontSize: 13,
                 ),
               ),
+              const Text(
+                "by ${AppInfo.madeBy}",
+                style: TextStyle(
+                  fontSize: 13,
+                ),
+              ),
               const SizedBox(
                 height: 30,
               ),
@@ -396,6 +402,9 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
                     borderColor: Colors.redAccent.withOpacity(0.2),
                   ),
                 ],
+              ),
+              const SizedBox(
+                height: 15,
               ),
             ],
           ),
