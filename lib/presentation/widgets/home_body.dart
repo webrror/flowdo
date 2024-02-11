@@ -73,7 +73,13 @@ class _HomeBodyState extends State<HomeBody> {
           );
         } else if (!snapshot.hasData || (snapshot.data?.docs.isEmpty ?? true)) {
           return Center(
-            child: Text(Strings.randomNoTodosMessages[Random().nextInt(Strings.randomNoTodosMessages.length)]),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
+                Strings.randomNoTodosMessages[Random().nextInt(Strings.randomNoTodosMessages.length)],
+                textAlign: TextAlign.center,
+              ),
+            ),
           );
         } else {
           List todos = sortedAndFilteredList(

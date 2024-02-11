@@ -32,14 +32,14 @@ class BlobBackground extends StatelessWidget {
           if ((constraints.constrainWidth() > 1024)) ...[
             FLPositionedWidget(
               assetPath: AssetConstants.blob0,
-              customTop: (getScreenHeight(context) * 0.6),
+              customTop: (getScreenHeight(context) * 0.8),
               customLeft: 200,
               rotate: -math.pi / 2,
             ),
             FLPositionedWidget(
               assetPath: AssetConstants.blob1,
               customTop: (getScreenHeight(context) * 0.4),
-              customRight: 200,
+              customRight: 300,
               rotate: -math.pi / 2,
             ),
           ]
