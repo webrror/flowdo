@@ -100,7 +100,6 @@ class _HomeBodyState extends State<HomeBody> {
               ),
             );
           }
-
           return LayoutBuilder(
             builder: (context, constraints) {
               return MasonryGridView.builder(
@@ -112,7 +111,7 @@ class _HomeBodyState extends State<HomeBody> {
                 mainAxisSpacing: 6,
                 crossAxisSpacing: 6,
                 gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: max(1, min(3, (constraints.maxWidth / 341).floor())),
+                  crossAxisCount: max(1, min(3, (constraints.maxWidth / 330).floor())),
                 ),
                 itemCount: todos.length,
                 shrinkWrap: true,
