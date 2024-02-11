@@ -38,6 +38,11 @@ ThemeData getAppTheme(
             statusBarColor: Colors.transparent,
           ),
         ),
+        popupMenuTheme: PopupMenuThemeData(
+          color: Colors.black.withOpacity(0.98),
+          surfaceTintColor: Colors.black.withOpacity(0.98),
+          elevation: 0,
+        ),
       );
     case Brightness.light:
       return ThemeData(
@@ -60,6 +65,11 @@ ThemeData getAppTheme(
             statusBarIconBrightness: Brightness.dark,
             statusBarColor: Colors.transparent,
           ),
+        ),
+        popupMenuTheme: PopupMenuThemeData(
+          elevation: 0,
+          color: Colors.white.withOpacity(0.98),
+          surfaceTintColor: Colors.white.withOpacity(0.98),
         ),
       );
   }

@@ -1,11 +1,11 @@
 {
-    "name": "flowdo",
-    "short_name": "flowdo",
+    "name": "Flowdo",
+    "short_name": "Flowdo",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0015ff",
-    "theme_color": "#fff",
-    "description": "A new Flutter project.",
+    "background_color": "#000",
+    "theme_color": "#000",
+    "description": "Flowdo is a simple and elegant todo app that helps you organize your tasks and achieve your goals.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

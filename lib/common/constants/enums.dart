@@ -1,18 +1,21 @@
 import 'package:flowdo/common/constants/constants.dart';
+import 'package:flutter/material.dart' show Color, Colors;
 
 enum ToastType { success, warning, error, info }
 
-enum FilterOptions { all, complete, incomplete }
+enum FilterOptions { all, complete, incomplete, category }
 
 extension FilterOptionsExtension on FilterOptions {
   String get name {
     switch (this) {
       case FilterOptions.all:
-        return "All";
+        return Strings.all;
       case FilterOptions.complete:
-        return "Completed";
+        return Strings.completed;
       case FilterOptions.incomplete:
-        return "Incomplete";
+        return Strings.incomplete;
+      case FilterOptions.category:
+        return Strings.category;
     }
   }
 }
@@ -52,3 +55,22 @@ extension OrderExtension on OrderBy {
     }
   }
 }
+
+enum TodoCategories { general, important, personal, work }
+
+extension TodoCategoryExtension on TodoCategories {
+  (String, Color) get categoryProperties {
+    switch (this) {
+      case TodoCategories.personal:
+        return (Strings.personal, Colors.blueAccent);
+      case TodoCategories.work:
+        return (Strings.work, Colors.green);
+      case TodoCategories.important:
+        return (Strings.important, Colors.redAccent);
+      case TodoCategories.general:
+        return (Strings.general, Colors.orangeAccent);
+    }
+  }
+}
+
+enum Corner { topLeft, topRight, bottomLeft, bottomRight }

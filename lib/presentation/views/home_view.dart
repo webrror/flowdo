@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,6 +9,7 @@ import 'package:flowdo/domain/data/services/theme_services.dart';
 import 'package:flowdo/common/utils/utils.dart';
 import 'package:flowdo/domain/models/todo_model.dart';
 import 'package:flowdo/presentation/widgets/widgets.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -28,9 +30,12 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
   final service = FirebaseFirestoreMethods();
   // Filter
   FilterOptions selectedFilter = FilterOptions.all;
+  TodoCategories? selectedCategoryForFilter;
   // Sort
   OrderBy sortOrder = OrderBy.desc;
   SortBy sortBy = SortBy.createdOn;
+  // Category
+  TodoCategories selectedCategory = TodoCategories.general;
 
   @override
   void initState() {
@@ -49,6 +54,7 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
     super.dispose();
   }
 
+  /// Create handler
   createNewTodo() async {
     try {
       TodoModel todo = TodoModel(
@@ -57,6 +63,7 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
         createdOn: Timestamp.now(),
         updatedOn: Timestamp.now(),
         isFresh: true,
+        categories: selectedCategory,
       );
 
       await service.addTodo(todo).then((value) {
@@ -72,12 +79,14 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
     }
   }
 
+  /// Update handler
   updateTodo(String id, TodoModel todo) async {
     try {
       TodoModel todoUpdate = todo.copyWith(
         content: _contentController.text.trim(),
         updatedOn: Timestamp.now(),
         isFresh: false,
+        categories: selectedCategory,
       );
       await service.updateTodo(id, todoUpdate).then((value) {
         Navigator.pop(context);
@@ -98,6 +107,7 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
     );
   }
 
+  /// Create/Update bottom sheet
   void showAddSheet({TodoModel? todoForUpdate, String? id}) {
     bool isEdit = todoForUpdate != null;
     showGlassBottomSheet(
@@ -146,26 +156,94 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(right: 15, top: 15),
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: StadiumButton(
-                        onTap: () {
-                          FocusManager.instance.primaryFocus?.unfocus();
-                          if (_formKey.currentState!.validate()) {
-                            if (isEdit) {
-                              if (id != null) {
-                                updateTodo(id, todoForUpdate);
+                    padding: const EdgeInsets.symmetric(horizontal: 15).copyWith(top: 15, left: 12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        StatefulBuilder(builder: (context, set) {
+                          return Theme(
+                            data: Theme.of(context).copyWith(
+                              splashColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              hoverColor: Colors.transparent,
+                            ),
+                            child: PopupMenuButton(
+                              tooltip: Strings.category,
+                              offset: const Offset(0, 6),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                              position: PopupMenuPosition.under,
+                              child: StadiumButton(
+                                onTap: null,
+                                horizontalPadding: 10,
+                                verticalPadding: 5,
+                                content: Row(
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 4,
+                                      backgroundColor: selectedCategory.categoryProperties.$2,
+                                    ),
+                                    const SizedBox(
+                                      width: 8,
+                                    ),
+                                    Text(
+                                      selectedCategory.categoryProperties.$1,
+                                      style: const TextStyle(fontSize: 12),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              itemBuilder: (context) {
+                                return TodoCategories.values.map((e) {
+                                  return PopupMenuItem(
+                                    onTap: () {
+                                      set(() {
+                                        selectedCategory = e;
+                                      });
+                                      setState(() {});
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                                      child: Row(
+                                        children: [
+                                          CircleAvatar(
+                                            radius: 4,
+                                            backgroundColor: e.categoryProperties.$2,
+                                          ),
+                                          const SizedBox(
+                                            width: 8,
+                                          ),
+                                          Text(
+                                            e.categoryProperties.$1,
+                                            style: const TextStyle(fontSize: 12),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                }).toList();
+                              },
+                            ),
+                          );
+                        }),
+                        StadiumButton(
+                          onTap: () {
+                            FocusManager.instance.primaryFocus?.unfocus();
+                            if (_formKey.currentState!.validate()) {
+                              if (isEdit) {
+                                if (id != null) {
+                                  updateTodo(id, todoForUpdate);
+                                } else {
+                                  return;
+                                }
                               } else {
-                                return;
+                                createNewTodo();
                               }
-                            } else {
-                              createNewTodo();
                             }
-                          }
-                        },
-                        content: Text(isEdit ? Strings.update : Strings.add),
-                      ),
+                          },
+                          content: Text(isEdit ? Strings.update : Strings.add),
+                        ),
+                      ],
                     ),
                   )
                 ],
@@ -177,11 +255,12 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
     );
   }
 
+  /// Preferences bottom sheet
   void showSettingsSheet(User user) {
     showGlassBottomSheet(
       context,
-      maxHeight: getScreenHeight(context) * 0.51,
-      minHeight: getScreenHeight(context) * 0.51,
+      maxHeight: getScreenHeight(context) * (kIsWeb ? 0.56 : 0.51),
+      minHeight: getScreenHeight(context) * (kIsWeb ? 0.56 : 0.51),
       sheetTitle: Strings.settings,
       buildSheet: [
         Padding(
@@ -279,9 +358,9 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
                   fontSize: 13,
                 ),
               ),
-              const Text(
-                AppInfo.appName,
-                style: TextStyle(
+              Text(
+                "${AppInfo.appName} (${kIsWeb ? "Web" : Platform.operatingSystem})",
+                style: const TextStyle(
                   fontSize: 13,
                 ),
               ),
@@ -325,6 +404,7 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
     );
   }
 
+  /// Acc. deletion bottom sheet
   void showAccDeleteSheet() {
     showGlassBottomSheet(
       context,
@@ -372,6 +452,7 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
     );
   }
 
+  /// Sort options bottom sheet
   void showSortSheet() async {
     bool? reload = await showGlassBottomSheet<bool>(
       context,
@@ -552,7 +633,6 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
                             tooltip: Strings.filter,
                             position: PopupMenuPosition.under,
                             offset: const Offset(0, 6),
-                            elevation: 1,
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                             child: StadiumButton(
                               verticalPadding: 3,
@@ -567,7 +647,38 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
                                       size: 11,
                                     ),
                                   ),
-                                  Text(selectedFilter.name),
+                                  Text.rich(
+                                    TextSpan(
+                                      children: [
+                                        if (selectedFilter != FilterOptions.category)
+                                          TextSpan(
+                                            text: selectedFilter.name,
+                                          ),
+                                        if (selectedCategoryForFilter != null && selectedFilter == FilterOptions.category) ...[
+                                          WidgetSpan(
+                                            alignment: PlaceholderAlignment.middle,
+                                            child: Row(
+                                              children: [
+                                                const SizedBox(
+                                                  width: 5,
+                                                ),
+                                                CircleAvatar(
+                                                  radius: 4,
+                                                  backgroundColor: selectedCategoryForFilter!.categoryProperties.$2,
+                                                ),
+                                                const SizedBox(
+                                                  width: 8,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          TextSpan(
+                                            text: selectedCategoryForFilter!.categoryProperties.$1,
+                                          ),
+                                        ]
+                                      ],
+                                    ),
+                                  ),
                                   const Padding(
                                     padding: EdgeInsets.only(left: 8),
                                     child: FaIcon(
@@ -579,16 +690,48 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
                               ),
                             ),
                             itemBuilder: (context) {
-                              return FilterOptions.values.map((e) {
+                              List<PopupMenuItem> filterOptions = FilterOptions.values.where((e) => e != FilterOptions.category).map(
+                                (e) {
+                                  return PopupMenuItem(
+                                    onTap: () {
+                                      setState(() {
+                                        selectedFilter = e;
+                                      });
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                                      child: Text(e.name),
+                                    ),
+                                  );
+                                },
+                              ).toList();
+
+                              List<PopupMenuItem> categories = TodoCategories.values.map((e) {
                                 return PopupMenuItem(
                                   onTap: () {
                                     setState(() {
-                                      selectedFilter = e;
+                                      selectedFilter = FilterOptions.category;
+                                      selectedCategoryForFilter = e;
                                     });
                                   },
-                                  child: Text(e.name),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                                    child: Row(
+                                      children: [
+                                        CircleAvatar(
+                                          radius: 4,
+                                          backgroundColor: e.categoryProperties.$2,
+                                        ),
+                                        const SizedBox(
+                                          width: 8,
+                                        ),
+                                        Text(e.categoryProperties.$1),
+                                      ],
+                                    ),
+                                  ),
                                 );
                               }).toList();
+                              return filterOptions + categories;
                             },
                           ),
                         ),
@@ -627,6 +770,7 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
                   filterOption: selectedFilter,
                   sortBy: sortBy,
                   orderBy: sortOrder,
+                  category: selectedCategoryForFilter,
                 ),
               ),
             ],

@@ -5,6 +5,7 @@ import 'package:flowdo/common/constants/constants.dart';
 import 'package:flowdo/domain/data/services/firebase_firestore_services.dart';
 import 'package:flowdo/common/utils/utils.dart';
 import 'package:flowdo/domain/models/todo_model.dart';
+import 'package:flowdo/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart' show FaIcon, FontAwesomeIcons;
@@ -17,18 +18,21 @@ class HomeBody extends StatefulWidget {
     required this.filterOption,
     required this.orderBy,
     required this.sortBy,
+    this.category,
   });
   final FirebaseFirestoreMethods service;
   final Function(TodoModel, String) onEditTodo;
   final FilterOptions filterOption;
   final OrderBy orderBy;
   final SortBy sortBy;
+  final TodoCategories? category;
 
   @override
   State<HomeBody> createState() => _HomeBodyState();
 }
 
 class _HomeBodyState extends State<HomeBody> {
+  /// Mark complete/incomplete a todo handler
   updateStatusOfTodo(String id, TodoModel todo) async {
     try {
       TodoModel todoUpdate = todo.copyWith(
@@ -47,6 +51,7 @@ class _HomeBodyState extends State<HomeBody> {
     }
   }
 
+  /// Delete handler
   deleteTodo(String id) async {
     try {
       await widget.service.deleteTodo(id).then((value) {
@@ -91,12 +96,13 @@ class _HomeBodyState extends State<HomeBody> {
             filterOption: widget.filterOption,
             sortBy: widget.sortBy,
             orderBy: widget.orderBy,
+            category: widget.category,
           );
 
           if (todos.isEmpty) {
-            return Center(
+            return const Center(
               child: Text(
-                widget.filterOption == FilterOptions.complete ? Strings.noCompletedTodos : Strings.noPendingTodos,
+                Strings.noTodos,
               ),
             );
           }
@@ -130,36 +136,154 @@ class _HomeBodyState extends State<HomeBody> {
                         color: getBorderColor(context),
                       ),
                     ),
-                    child: Padding(
-                      // padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 8).copyWith(top: 8, bottom: 0, left: 0, right: 0),
-                      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
-                      child: Row(
-                        children: [
-                          Tooltip(
-                            message: todo.isCompleted ? Strings.markAsIncomplete : Strings.markAsComplete,
-                            child: Transform.scale(
-                              scale: 0.9,
-                              child: Checkbox(
-                                shape: const CircleBorder(),
-                                value: todo.isCompleted,
-                                onChanged: (val) {
-                                  updateStatusOfTodo(todoId, todo);
-                                },
+                    child: Stack(
+                      children: [
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: SizedBox(
+                            width: 18,
+                            height: 18,
+                            child: CustomPaint(
+                              painter: CornerTrianglePainter(
+                                corner: Corner.topLeft,
+                                color: todo.categories.categoryProperties.$2.withOpacity(0.9),
                               ),
                             ),
                           ),
-                          const SizedBox(
-                            width: 7,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 8).copyWith(
+                            top: 12,
+                            bottom: 0,
+                            left: 0.1,
+                            right: 0.1,
                           ),
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () {
-                                updateStatusOfTodo(todoId, todo);
-                              },
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  AnimatedLineThrough(
+                          // padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
+                          // child: Row(
+                          //   children: [
+                          //     Tooltip(
+                          //       message: todo.isCompleted ? Strings.markAsIncomplete : Strings.markAsComplete,
+                          //       child: Transform.scale(
+                          //         scale: 0.9,
+                          //         child: Checkbox(
+                          //           shape: const CircleBorder(),
+                          //           value: todo.isCompleted,
+                          //           onChanged: (val) {
+                          //             updateStatusOfTodo(todoId, todo);
+                          //           },
+                          //         ),
+                          //       ),
+                          //     ),
+                          //     const SizedBox(
+                          //       width: 7,
+                          //     ),
+                          //     Expanded(
+                          //       child: GestureDetector(
+                          //         onTap: () {
+                          //           updateStatusOfTodo(todoId, todo);
+                          //         },
+                          //         child: Column(
+                          //           crossAxisAlignment: CrossAxisAlignment.start,
+                          //           children: [
+                          //             AnimatedLineThrough(
+                          //               isCrossed: todo.isCompleted,
+                          //               duration: const Duration(milliseconds: 200),
+                          //               child: Text(
+                          //                 todo.content,
+                          //                 style: const TextStyle(
+                          //                   fontWeight: FontWeight.normal,
+                          //                 ),
+                          //               ),
+                          //             ),
+                          //             const SizedBox(
+                          //               height: 3,
+                          //             ),
+                          //             Row(
+                          //               children: [
+                          //                 CircleAvatar(
+                          //                   radius: 4,
+                          //                   backgroundColor: todo.categories.categoryProperties.$2,
+                          //                 ),
+                          //                 const SizedBox(
+                          //                   width: 5,
+                          //                 ),
+                          //                 if (todo.isFresh) ...[
+                          //                   Expanded(
+                          //                     child: Text(
+                          //                       "${Strings.createdOn2} ${FLDateFormatter().customDateTime(
+                          //                         inputString: "",
+                          //                         inputDatetime: todo.createdOn.toDate(),
+                          //                         outputFormat: DateTimeFormats.ddMMM,
+                          //                       )} at ${FLDateFormatter().customDateTime(
+                          //                         inputString: "",
+                          //                         inputDatetime: todo.createdOn.toDate(),
+                          //                         outputFormat: DateTimeFormats.hhmmaa,
+                          //                       )}",
+                          //                       style: const TextStyle(fontSize: 11),
+                          //                     ),
+                          //                   ),
+                          //                 ] else ...[
+                          //                   Expanded(
+                          //                     child: Text(
+                          //                       "${Strings.lastUpdatedOn} ${FLDateFormatter().customDateTime(
+                          //                         inputString: "",
+                          //                         inputDatetime: todo.updatedOn.toDate(),
+                          //                         outputFormat: DateTimeFormats.ddMMM,
+                          //                       )} at ${FLDateFormatter().customDateTime(
+                          //                         inputString: "",
+                          //                         inputDatetime: todo.updatedOn.toDate(),
+                          //                         outputFormat: DateTimeFormats.hhmmaa,
+                          //                       )}",
+                          //                       style: const TextStyle(fontSize: 11),
+                          //                     ),
+                          //                   ),
+                          //                 ]
+                          //               ],
+                          //             ),
+                          //           ],
+                          //         ),
+                          //       ),
+                          //     ),
+                          //     const SizedBox(
+                          //       width: 7,
+                          //     ),
+                          //     Row(
+                          //       children: [
+                          //         IconButton(
+                          //           tooltip: Strings.editTask,
+                          //           onPressed: () {
+                          //             widget.onEditTodo(todo, todoId);
+                          //           },
+                          //           icon: const FaIcon(
+                          //             FontAwesomeIcons.pen,
+                          //             size: 14,
+                          //           ),
+                          //         ),
+                          //         IconButton(
+                          //           tooltip: Strings.deleteTask,
+                          //           onPressed: () {
+                          //             deleteTodo(todoId);
+                          //           },
+                          //           icon: const FaIcon(
+                          //             FontAwesomeIcons.trash,
+                          //             size: 14,
+                          //           ),
+                          //         ),
+                          //       ],
+                          //     )
+                          //   ],
+                          // ),
+
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  updateStatusOfTodo(todoId, todo);
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                                  child: AnimatedLineThrough(
                                     isCrossed: todo.isCompleted,
                                     duration: const Duration(milliseconds: 200),
                                     child: Text(
@@ -169,176 +293,102 @@ class _HomeBodyState extends State<HomeBody> {
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(
-                                    height: 3,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 12,
+                              ),
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 5).copyWith(right: 0),
+                                decoration: const BoxDecoration(
+                                  // color: todo.categories.categoryProperties.$2.withOpacity(0.15),
+                                  color: Colors.white10,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(2),
+                                    topRight: Radius.circular(2),
                                   ),
-                                  if (todo.isFresh) ...[
-                                    Text(
-                                      "${Strings.createdOn2} ${FLDateFormatter().customDateTime(
-                                        inputString: "",
-                                        inputDatetime: todo.createdOn.toDate(),
-                                        outputFormat: DateTimeFormats.ddMMM,
-                                      )} at ${FLDateFormatter().customDateTime(
-                                        inputString: "",
-                                        inputDatetime: todo.createdOn.toDate(),
-                                        outputFormat: DateTimeFormats.hhmmaa,
-                                      )}",
-                                      style: const TextStyle(fontSize: 11),
-                                    ),
-                                  ] else ...[
-                                    Text(
-                                      "${Strings.lastUpdatedOn} ${FLDateFormatter().customDateTime(
-                                        inputString: "",
-                                        inputDatetime: todo.updatedOn.toDate(),
-                                        outputFormat: DateTimeFormats.ddMMM,
-                                      )} at ${FLDateFormatter().customDateTime(
-                                        inputString: "",
-                                        inputDatetime: todo.updatedOn.toDate(),
-                                        outputFormat: DateTimeFormats.hhmmaa,
-                                      )}",
-                                      style: const TextStyle(fontSize: 11),
-                                    ),
-                                  ]
-                                ],
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 7,
-                          ),
-                          Row(
-                            children: [
-                              IconButton(
-                                tooltip: Strings.editTask,
-                                onPressed: () {
-                                  widget.onEditTodo(todo, todoId);
-                                },
-                                icon: const FaIcon(
-                                  FontAwesomeIcons.pen,
-                                  size: 14,
                                 ),
-                              ),
-                              IconButton(
-                                tooltip: Strings.deleteTask,
-                                onPressed: () {
-                                  deleteTodo(todoId);
-                                },
-                                icon: const FaIcon(
-                                  FontAwesomeIcons.trash,
-                                  size: 14,
+                                child: Row(
+                                  children: [
+                                    Tooltip(
+                                      message: todo.isCompleted ? Strings.markAsIncomplete : Strings.markAsComplete,
+                                      child: Transform.scale(
+                                        scale: 0.9,
+                                        child: Checkbox(
+                                          shape: const CircleBorder(),
+                                          value: todo.isCompleted,
+                                          onChanged: (val) {
+                                            updateStatusOfTodo(todoId, todo);
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                    ...[
+                                      if (todo.isFresh) ...[
+                                        Expanded(
+                                          child: Center(
+                                            child: Text(
+                                              "${Strings.createdOn2} ${FLDateFormatter().customDateTime(
+                                                inputString: "",
+                                                inputDatetime: todo.createdOn.toDate(),
+                                                outputFormat: DateTimeFormats.ddMMM,
+                                              )} at ${FLDateFormatter().customDateTime(
+                                                inputString: "",
+                                                inputDatetime: todo.createdOn.toDate(),
+                                                outputFormat: DateTimeFormats.hhmmaa,
+                                              )}",
+                                              style: const TextStyle(fontSize: 12),
+                                            ),
+                                          ),
+                                        ),
+                                      ] else ...[
+                                        Expanded(
+                                          child: Center(
+                                            child: Text(
+                                              "${Strings.lastUpdatedOn} ${FLDateFormatter().customDateTime(
+                                                inputString: "",
+                                                inputDatetime: todo.updatedOn.toDate(),
+                                                outputFormat: DateTimeFormats.ddMMM,
+                                              )} at ${FLDateFormatter().customDateTime(
+                                                inputString: "",
+                                                inputDatetime: todo.updatedOn.toDate(),
+                                                outputFormat: DateTimeFormats.hhmmaa,
+                                              )}",
+                                              style: const TextStyle(fontSize: 12),
+                                            ),
+                                          ),
+                                        ),
+                                      ]
+                                    ],
+                                    ...[
+                                      IconButton(
+                                        tooltip: Strings.editTask,
+                                        onPressed: () {
+                                          widget.onEditTodo(todo, todoId);
+                                        },
+                                        icon: const FaIcon(
+                                          FontAwesomeIcons.pen,
+                                          size: 14,
+                                        ),
+                                      ),
+                                      IconButton(
+                                        tooltip: Strings.deleteTask,
+                                        onPressed: () {
+                                          deleteTodo(todoId);
+                                        },
+                                        icon: const FaIcon(
+                                          FontAwesomeIcons.trash,
+                                          size: 14,
+                                        ),
+                                      ),
+                                    ]
+                                  ],
                                 ),
-                              ),
+                              )
                             ],
-                          )
-                        ],
-                      ),
-
-                      // child: Column(
-                      //   crossAxisAlignment: CrossAxisAlignment.start,
-                      //   children: [
-                      //     GestureDetector(
-                      //       onTap: () {
-                      //         updateStatusOfTodo(todoId, todo);
-                      //       },
-                      //       child: Padding(
-                      //         padding: const EdgeInsets.symmetric(horizontal: 8),
-                      //         child: AnimatedLineThrough(
-                      //           isCrossed: todo.isCompleted,
-                      //           duration: const Duration(milliseconds: 200),
-                      //           child: Text(
-                      //             todo.content,
-                      //             style: const TextStyle(
-                      //               fontWeight: FontWeight.normal,
-                      //             ),
-                      //           ),
-                      //         ),
-                      //       ),
-                      //     ),
-                      //     const SizedBox(
-                      //       height: 15,
-                      //     ),
-                      //     Container(
-                      //       color: getSegmentButtonBgColor(context),
-                      //       padding: const EdgeInsets.symmetric(horizontal: 5).copyWith(right: 0),
-                      //       child: Row(
-                      //         children: [
-                      //           Tooltip(
-                      //             message: todo.isCompleted ? Strings.markAsIncomplete : Strings.markAsComplete,
-                      //             child: Transform.scale(
-                      //               scale: 0.9,
-                      //               child: Checkbox(
-                      //                 shape: const CircleBorder(),
-                      //                 value: todo.isCompleted,
-                      //                 onChanged: (val) {
-                      //                   updateStatusOfTodo(todoId, todo);
-                      //                 },
-                      //               ),
-                      //             ),
-                      //           ),
-                      //           ...[
-                      //             if (todo.isFresh) ...[
-                      //               Expanded(
-                      //                 child: Center(
-                      //                   child: Text(
-                      //                     "${Strings.createdOn2} ${FLDateFormatter().customDateTime(
-                      //                       inputString: "",
-                      //                       inputDatetime: todo.createdOn.toDate(),
-                      //                       outputFormat: DateTimeFormats.ddMMM,
-                      //                     )} at ${FLDateFormatter().customDateTime(
-                      //                       inputString: "",
-                      //                       inputDatetime: todo.createdOn.toDate(),
-                      //                       outputFormat: DateTimeFormats.hhmmaa,
-                      //                     )}",
-                      //                     style: const TextStyle(fontSize: 12),
-                      //                   ),
-                      //                 ),
-                      //               ),
-                      //             ] else ...[
-                      //               Expanded(
-                      //                 child: Center(
-                      //                   child: Text(
-                      //                     "${Strings.lastUpdatedOn} ${FLDateFormatter().customDateTime(
-                      //                       inputString: "",
-                      //                       inputDatetime: todo.updatedOn.toDate(),
-                      //                       outputFormat: DateTimeFormats.ddMMM,
-                      //                     )} at ${FLDateFormatter().customDateTime(
-                      //                       inputString: "",
-                      //                       inputDatetime: todo.updatedOn.toDate(),
-                      //                       outputFormat: DateTimeFormats.hhmmaa,
-                      //                     )}",
-                      //                     style: const TextStyle(fontSize: 12),
-                      //                   ),
-                      //                 ),
-                      //               ),
-                      //             ]
-                      //           ],
-                      //           ...[
-                      //             IconButton(
-                      //               tooltip: Strings.editTask,
-                      //               onPressed: () {
-                      //                 widget.onEditTodo(todo, todoId);
-                      //               },
-                      //               icon: const FaIcon(
-                      //                 FontAwesomeIcons.pencil,
-                      //                 size: 14,
-                      //               ),
-                      //             ),
-                      //             IconButton(
-                      //               tooltip: Strings.deleteTask,
-                      //               onPressed: () {
-                      //                 deleteTodo(todoId);
-                      //               },
-                      //               icon: const FaIcon(
-                      //                 FontAwesomeIcons.trash,
-                      //                 size: 14,
-                      //               ),
-                      //             ),
-                      //           ]
-                      //         ],
-                      //       ),
-                      //     )
-                      //   ],
-                      // ),
+                          ),
+                        ),
+                      ],
                     ),
                   );
                 },
@@ -356,6 +406,7 @@ List<dynamic> sortedAndFilteredList({
   required FilterOptions filterOption,
   required SortBy sortBy,
   required OrderBy orderBy,
+  TodoCategories? category,
 }) {
   List<dynamic> filteredList = inputList.where((element) {
     TodoModel todo = element.data();
@@ -366,6 +417,19 @@ List<dynamic> sortedAndFilteredList({
         return todo.isCompleted;
       case FilterOptions.incomplete:
         return !todo.isCompleted;
+      case FilterOptions.category:
+        switch (category) {
+          case TodoCategories.personal:
+            return todo.categories == TodoCategories.personal;
+          case TodoCategories.work:
+            return todo.categories == TodoCategories.work;
+          case TodoCategories.important:
+            return todo.categories == TodoCategories.important;
+          case TodoCategories.general:
+            return todo.categories == TodoCategories.general;
+          default:
+            return todo.categories == TodoCategories.general;
+        }
     }
   }).toList();
 

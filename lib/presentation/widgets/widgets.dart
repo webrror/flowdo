@@ -3,3 +3,4 @@ export 'blob_bg.dart';
 export 'bottom_sheet.dart';
 export 'home_body.dart';
 export 'buttons/stadium_button.dart';
+export 'corner_painter.dart';

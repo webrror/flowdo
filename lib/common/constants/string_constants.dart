@@ -69,14 +69,24 @@ class Strings {
   static const permanentAction = "This action is permanent and means all your tasks and completed items will be erased forever.";
   static const preferences = "Preferences";
   static const filter = "Filter";
+  static const category = "Category";
   static const sort = "Sort";
   static const addNewTask = "Add new task";
   static const noCompletedTodos = "No completed todos found";
   static const noPendingTodos = "No pending todos found";
+  static const noTodos = "No todos found";
   static const markAsIncomplete = "Mark as incomplete";
   static const markAsComplete = "Mark as complete";
   static const editTask = "Edit task";
   static const deleteTask = "Delete task";
+  static const personal = "Personal";
+  static const work = "Work";
+  static const important = "Important";
+  static const general = "General";
+  static const all = "All";
+  static const completed = "Completed";
+  static const incomplete = "Incomplete";
+
 
   static List<String> randomNoTodosMessages = [
     "Time to blast off on your next adventure! What will you tackle first?",
@@ -93,7 +103,7 @@ class Strings {
 class AppInfo {
   static const appName = "Flowdo";
   static const packageName = "com.rejie.flowdo";
-  static const appVersion = 'v1.0.0 Beta 1';
+  static const appVersion = 'v1.0.0 Beta 2';
   static const builtWithFlutter = "Built with Flutter and Firebase";
   static const madeBy = "Jerin Jacob (@webrror)";
 }
