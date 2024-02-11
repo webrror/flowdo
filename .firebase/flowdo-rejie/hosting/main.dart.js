@@ -52218,7 +52218,7 @@ K(a){if(A.rA(a,!0,t.t6)!=null)return B.G2
 return B.AY}}
 A.LR.prototype={
 K(a){var s=null,r=A.bi(a,s,t.w).w
-return A.aLC(A.hP(A.kt(A.a([B.Vx,B.PK,A.oU(s,s,B.Vr,25,new A.a5e(a),s,8),B.PG,A.oU(s,s,B.Vj,25,new A.a5f(a),s,8)],t.D),B.aw,B.k4,B.aN),s,r.a.a),s)}}
+return A.aLC(A.hP(A.kt(A.a([B.Vw,B.PK,A.oU(s,s,B.Vp,25,new A.a5e(a),s,8),B.PG,A.oU(s,s,B.Vi,25,new A.a5f(a),s,8)],t.D),B.aw,B.k4,B.aN),s,r.a.a),s)}}
 A.a5e.prototype={
 $0(){var s=this.a
 A.rA(s,!1,t.jX).xy(s)},
@@ -52313,16 +52313,16 @@ q=m.c
 q.toString
 s=A.bi(q,l,s).w
 q=t.D
-p=A.a([B.Vl,B.eN,A.aID(new A.aur(),t.V9),B.eN,B.Vs,B.zC],q)
+p=A.a([B.Vk,B.eN,A.aID(new A.aur(),t.V9),B.eN,B.Vq,B.zC],q)
 o=a.a.c.a
 if(o.f)B.b.P(p,A.a([A.dp("Guest User  ("+o.a+")",l,l,l,B.eT,l,l)],q))
 else{n=o.c
 B.b.P(p,A.a([A.dp(A.j(n==null?l:B.c.ej(n))+" ("+A.j(o.b)+")",l,l,l,B.eT,l,l)],q))}p.push(B.eN)
-p.push(B.Vo)
+p.push(B.Vm)
 p.push(B.zC)
-p.push(B.Vi)
-p.push(B.Vu)
-p.push(B.Vn)
+p.push(B.Vs)
+p.push(B.Vt)
+p.push(B.Vy)
 p.push(B.PI)
 o=A.oU(l,l,B.Vg,25,new A.aus(m),l,8)
 n=m.c
@@ -52341,7 +52341,7 @@ q=o.c
 q.toString
 q=A.dp("Delete Account",n,n,n,A.hW(n,n,A.Z(q).ax.at,n,n,n,n,n,n,n,n,n,n,n,n,n,n,!0,n,n,n,n,n,n,n,n),n,n)
 p=t.D
-A.z4(m,A.a([new A.c_(B.nk,A.kt(A.a([B.PL,B.Vv,B.PH,A.oU(A.S(B.d.bl(25.5),244,67,54),A.S(51,255,82,82),q,25,new A.aun(o),n,8)],p),B.aw,B.k4,B.aN),n)],p),n,!0,r.a.b*0.32,s.a.b*0.32,"Are you sure you want to delete your account?",t.z)},
+A.z4(m,A.a([new A.c_(B.nk,A.kt(A.a([B.PL,B.Vu,B.PH,A.oU(A.S(B.d.bl(25.5),244,67,54),A.S(51,255,82,82),q,25,new A.aun(o),n,8)],p),B.aw,B.k4,B.aN),n)],p),n,!0,r.a.b*0.32,s.a.b*0.32,"Are you sure you want to delete your account?",t.z)},
 xu(){var s=0,r=A.I(t.z),q=this,p,o
 var $async$xu=A.D(function(a,b){if(a===1)return A.F(b,r)
 while(true)switch(s){case 0:o=q.c
@@ -52376,7 +52376,7 @@ n=A.uh(15)
 n=A.l9(A.a([new A.xe(q,new A.w0(new A.auh(l),"Filter",1,A.oU(k,k,A.l9(A.a([B.MB,A.dp(A.aJx(l.r),k,k,k,k,k,k),B.MD],o),B.aw,B.aD,B.aN),14,k,k,3),B.LX,new A.ck(n,B.p),B.Nt,k,t.q3),k),A.oU(k,k,A.l9(A.a([B.MC,A.dp(A.aLW(l.x)+" - "+A.aXN(l.w),k,k,k,k,k,k)],o),B.aw,B.aD,B.aN),14,new A.aui(l),"Sort",3)],o),B.aw,B.fZ,B.aN)
 q=l.r
 m=l.x
-m=A.a([new A.EY(B.Vy,j,new A.Rf(new A.c_(p,n,k),B.zA,k),B.cg,!1,!1,!0,k),new A.T5(new A.Bh(l.f,new A.auj(l),q,l.w,m,k),k)],o)
+m=A.a([new A.EY(B.Vx,j,new A.Rf(new A.c_(p,n,k),B.zA,k),B.cg,!1,!1,!0,k),new A.T5(new A.Bh(l.f,new A.auj(l),q,l.w,m,k),k)],o)
 j=A.mK(B.dv,A.a([B.Be,r,new A.Nl(m,B.b3,!1,k,!1,B.Lz,k,!1,k,0,k,k,B.ar,B.yI,k,B.a8,k)],o),B.a8,B.cB)
 s=s.rb(50,50,B.b1)
 r=A.aIh(B.cg)
@@ -52477,7 +52477,7 @@ s=B.Fj.n5(0)
 r=this.a
 q=t.Ms
 p=t.Wt
-return A.fU(o,A.kt(A.a([B.Vw,B.hQ,A.aMJ(A.a7(new A.a6(B.Ig,new A.auy(r,b),q),!0,q.i("aQ.E")),8,8),B.hQ,B.Vt,B.hQ,A.aMJ(A.a7(new A.a6(B.I7,new A.auz(r,b),p),!0,p.i("aQ.E")),8,8),B.hQ,new A.i6(B.dw,o,o,A.oU(o,o,B.Vq,25,new A.auA(a),o,8),o),B.eN],t.D),B.ch,B.aD,B.aN),B.u,B.t,new A.as(0,1/0,l.a.b*0.34,m.a.b*0.34),o,o,o,s,n.a.a)},
+return A.fU(o,A.kt(A.a([B.Vv,B.hQ,A.aMJ(A.a7(new A.a6(B.Ig,new A.auy(r,b),q),!0,q.i("aQ.E")),8,8),B.hQ,B.Vr,B.hQ,A.aMJ(A.a7(new A.a6(B.I7,new A.auz(r,b),p),!0,p.i("aQ.E")),8,8),B.hQ,new A.i6(B.dw,o,o,A.oU(o,o,B.Vo,25,new A.auA(a),o,8),o),B.eN],t.D),B.ch,B.aD,B.aN),B.u,B.t,new A.as(0,1/0,l.a.b*0.34,m.a.b*0.34),o,o,o,s,n.a.a)},
 $S:533}
 A.auy.prototype={
 $1(a){var s=null,r=this.a
@@ -100585,13 +100585,13 @@ B.BO=new A.kp(B.kX,B.Gq,B.Vh,t.b6)
 B.A3=new A.jV(1,"light")
 B.Gf=new A.ej(58234,"MaterialIcons",null,!1)
 B.Gs=new A.kG(B.Gf,null,null,null,null)
-B.Vk=new A.di("Light",null,null,null,null,null,null,null,null)
-B.BN=new A.kp(B.A3,B.Gs,B.Vk,t.b6)
+B.Vj=new A.di("Light",null,null,null,null,null,null,null,null)
+B.BN=new A.kp(B.A3,B.Gs,B.Vj,t.b6)
 B.hY=new A.jV(0,"system")
 B.Gi=new A.ej(58531,"MaterialIcons",null,!1)
 B.Gt=new A.kG(B.Gi,null,null,null,null)
-B.Vm=new A.di("System",null,null,null,null,null,null,null,null)
-B.BM=new A.kp(B.hY,B.Gt,B.Vm,t.b6)
+B.Vl=new A.di("System",null,null,null,null,null,null,null,null)
+B.BM=new A.kp(B.hY,B.Gt,B.Vl,t.b6)
 B.If=A.a(s([B.BO,B.BN,B.BM]),A.a0("u<kp<jV>>"))
 B.PS=new A.oT(0,"updatedOn")
 B.zF=new A.oT(1,"createdOn")
@@ -102077,8 +102077,8 @@ B.zB=new A.e8(7,null,null,null)
 B.cH=new A.UF(1,"down")
 B.EK=new A.NL(null)
 B.nq=new A.lW(1,B.jo,B.EK,null)
-B.Vp=new A.di("OR",null,null,null,null,null,null,null,null)
-B.IY=A.a(s([B.nq,B.hP,B.Vp,B.hP,B.nq]),t.D)
+B.Vn=new A.di("OR",null,null,null,null,null,null,null,null)
+B.IY=A.a(s([B.nq,B.hP,B.Vn,B.hP,B.nq]),t.D)
 B.NM=new A.E5(B.b2,B.k4,B.aN,B.aw,null,B.cH,null,B.IY,null)
 B.PG=new A.e8(200,50,B.NM,null)
 B.hQ=new A.e8(null,12,null,null)
@@ -102483,24 +102483,24 @@ B.Ug=new A.o(!0,B.j,null,"Roboto",null,null,null,null,null,null,null,null,null,n
 B.TM=new A.o(!0,B.j,null,"Roboto",null,null,null,null,null,null,null,null,null,null,null,null,null,B.f,null,null,null,"whiteMountainView labelSmall",null,null,null,null)
 B.Vf=new A.dj(B.Tq,B.UV,B.UD,B.RX,B.Uw,B.Tn,B.V_,B.So,B.T1,B.Uk,B.RO,B.UF,B.Ut,B.Ug,B.TM)
 B.Vg=new A.di("Sign Out",null,null,null,null,null,null,null,null)
-B.Vi=new A.di("v1.0.0 Alpha 3",null,B.eT,null,null,null,null,null,null)
-B.Vj=new A.di("Sign as a guest",null,null,null,null,null,null,null,null)
+B.Vi=new A.di("Sign as a guest",null,null,null,null,null,null,null,null)
 B.kW=new A.o(!0,null,null,null,null,null,15,B.b6,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.Vl=new A.di("Theme",null,B.kW,null,null,null,null,null,null)
-B.Vn=new A.di("com.rejie.flowdo",null,B.eT,null,null,null,null,null,null)
-B.Vo=new A.di("App Info",null,B.kW,null,null,null,null,null,null)
-B.Vq=new A.di("Done",null,null,null,null,null,null,null,null)
-B.Vr=new A.di("Sign in with Google",null,null,null,null,null,null,null,null)
-B.Vs=new A.di("Account",null,B.kW,null,null,null,null,null,null)
+B.Vk=new A.di("Theme",null,B.kW,null,null,null,null,null,null)
+B.Vm=new A.di("App Info",null,B.kW,null,null,null,null,null,null)
+B.Vo=new A.di("Done",null,null,null,null,null,null,null,null)
+B.Vp=new A.di("Sign in with Google",null,null,null,null,null,null,null,null)
+B.Vq=new A.di("Account",null,B.kW,null,null,null,null,null,null)
 B.zZ=new A.o(!0,null,null,null,null,null,16,B.b6,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.Vt=new A.di("Order",null,B.zZ,null,null,null,null,null,null)
-B.Vu=new A.di("Flowdo",null,B.eT,null,null,null,null,null,null)
+B.Vr=new A.di("Order",null,B.zZ,null,null,null,null,null,null)
+B.Vs=new A.di("v1.0.0 Beta 1",null,B.eT,null,null,null,null,null,null)
+B.Vt=new A.di("Flowdo",null,B.eT,null,null,null,null,null,null)
 B.Sw=new A.o(!0,null,null,null,null,null,15,B.m,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.Vv=new A.di("This action is permanent and means all your tasks and completed items will be erased forever.",null,B.Sw,B.eQ,null,null,null,null,null)
-B.Vw=new A.di("Sort By",null,B.zZ,null,null,null,null,null,null)
-B.Vy=new A.di("Flowdo",null,B.hX,null,null,null,null,null,null)
+B.Vu=new A.di("This action is permanent and means all your tasks and completed items will be erased forever.",null,B.Sw,B.eQ,null,null,null,null,null)
+B.Vv=new A.di("Sort By",null,B.zZ,null,null,null,null,null,null)
+B.Vx=new A.di("Flowdo",null,B.hX,null,null,null,null,null,null)
 B.Sx=new A.o(!0,null,null,null,null,null,30,B.b6,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.Vx=new A.di("Flowdo",null,B.Sx,null,null,null,null,null,null)
+B.Vw=new A.di("Flowdo",null,B.Sx,null,null,null,null,null,null)
+B.Vy=new A.di("Built with Flutter and Firebase",null,B.eT,null,null,null,null,null,null)
 B.Mn=new A.k(0.056,0.024)
 B.Ma=new A.k(0.108,0.3085)
 B.Mt=new A.k(0.198,0.541)
