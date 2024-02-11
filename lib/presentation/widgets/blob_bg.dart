@@ -38,7 +38,7 @@ class BlobBackground extends StatelessWidget {
             ),
             FLPositionedWidget(
               assetPath: AssetConstants.blob1,
-              customTop: (getScreenHeight(context) * 0.4),
+              customTop: (getScreenHeight(context) * 0.3),
               customRight: 300,
               rotate: -math.pi / 2,
             ),

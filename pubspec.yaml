@@ -62,9 +62,18 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
   build_runner: any
+  flutter_launcher_icons: ^0.13.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+
+flutter_launcher_icons:
+  android: true
+  ios: true 
+  image_path_android: "assets/app_icon/flowdo_icon.png"
+  image_path_ios: "assets/app_icon/flowdo_icon_ios.png"
+  min_sdk_android: 21
+  remove_alpha_ios: true
 
 # The following section is specific to Flutter packages.
 flutter:
