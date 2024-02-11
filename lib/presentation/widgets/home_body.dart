@@ -5,8 +5,8 @@ import 'package:flowdo/common/constants/constants.dart';
 import 'package:flowdo/domain/data/services/firebase_firestore_services.dart';
 import 'package:flowdo/common/utils/utils.dart';
 import 'package:flowdo/domain/models/todo_model.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart' show FaIcon, FontAwesomeIcons;
 
 class HomeBody extends StatefulWidget {
@@ -62,153 +62,283 @@ class _HomeBodyState extends State<HomeBody> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      child: StreamBuilder(
-        stream: widget.service.getAllTodos(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator.adaptive(
-                strokeCap: StrokeCap.round,
-              ),
-            );
-          } else if (!snapshot.hasData || (snapshot.data?.docs.isEmpty ?? true)) {
+    return StreamBuilder(
+      stream: widget.service.getAllTodos(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData && snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+            child: CircularProgressIndicator(
+              strokeCap: StrokeCap.round,
+            ),
+          );
+        } else if (!snapshot.hasData || (snapshot.data?.docs.isEmpty ?? true)) {
+          return Center(
+            child: Text(Strings.randomNoTodosMessages[Random().nextInt(Strings.randomNoTodosMessages.length)]),
+          );
+        } else {
+          List todos = sortedAndFilteredList(
+            inputList: snapshot.data?.docs ?? [],
+            filterOption: widget.filterOption,
+            sortBy: widget.sortBy,
+            orderBy: widget.orderBy,
+          );
+
+          if (todos.isEmpty) {
             return Center(
-              child: Text(Strings.randomNoTodosMessages[Random().nextInt(Strings.randomNoTodosMessages.length)]),
-            );
-          } else {
-            List todos = sortedAndFilteredList(
-              inputList: snapshot.data?.docs ?? [],
-              filterOption: widget.filterOption,
-              sortBy: widget.sortBy,
-              orderBy: widget.orderBy,
-            );
-
-            if (todos.isEmpty) {
-              return Center(
-                child: Text(
-                  widget.filterOption == FilterOptions.complete ? Strings.noCompletedTodos : Strings.noPendingTodos,
-                ),
-              );
-            }
-
-            return ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 15).copyWith(
-                bottom: 90,
-                top: kToolbarHeight + (kIsWeb ? 35 : 100),
+              child: Text(
+                widget.filterOption == FilterOptions.complete ? Strings.noCompletedTodos : Strings.noPendingTodos,
               ),
-              itemBuilder: (context, index) {
-                TodoModel todo = todos[index].data();
-                String todoId = todos[index].id;
-                return Card(
-                  color: Colors.transparent,
-                  elevation: 0,
-                  key: Key(todoId),
-                  clipBehavior: Clip.antiAlias,
-                  margin: EdgeInsets.zero,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: Row(
-                      children: [
-                        Tooltip(
-                          message: todo.isCompleted ? Strings.markAsIncomplete : Strings.markAsComplete,
-                          child: Checkbox(
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-                            value: todo.isCompleted,
-                            onChanged: (val) {
-                              updateStatusOfTodo(todoId, todo);
-                            },
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              updateStatusOfTodo(todoId, todo);
-                            },
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                AnimatedLineThrough(
-                                  isCrossed: todo.isCompleted,
-                                  duration: const Duration(milliseconds: 200),
-                                  child: Text(
-                                    todo.content,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.normal,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 3,
-                                ),
-                                if (todo.isFresh) ...[
-                                  Text(
-                                    "${Strings.createdOn2} ${FLDateFormatter().customDateTime(
-                                      inputString: "",
-                                      inputDatetime: todo.createdOn.toDate(),
-                                      outputFormat: DateTimeFormats.ddMMM,
-                                    )} at ${FLDateFormatter().customDateTime(
-                                      inputString: "",
-                                      inputDatetime: todo.createdOn.toDate(),
-                                      outputFormat: DateTimeFormats.hhmmaa,
-                                    )}",
-                                    style: const TextStyle(fontSize: 11),
-                                  ),
-                                ] else ...[
-                                  Text(
-                                    "${Strings.lastUpdatedOn} ${FLDateFormatter().customDateTime(
-                                      inputString: "",
-                                      inputDatetime: todo.updatedOn.toDate(),
-                                      outputFormat: DateTimeFormats.ddMMM,
-                                    )} at ${FLDateFormatter().customDateTime(
-                                      inputString: "",
-                                      inputDatetime: todo.updatedOn.toDate(),
-                                      outputFormat: DateTimeFormats.hhmmaa,
-                                    )}",
-                                    style: const TextStyle(fontSize: 11),
-                                  ),
-                                ]
-                              ],
-                            ),
-                          ),
-                        ),
-                        Row(
-                          children: [
-                            IconButton(
-                              tooltip: Strings.editTask,
-                              onPressed: () {
-                                widget.onEditTodo(todo, todoId);
-                              },
-                              icon: const FaIcon(
-                                FontAwesomeIcons.pencil,
-                                size: 14,
-                              ),
-                            ),
-                            IconButton(
-                              tooltip: Strings.deleteTask,
-                              onPressed: () {
-                                deleteTodo(todoId);
-                              },
-                              icon: const FaIcon(
-                                FontAwesomeIcons.trash,
-                                size: 14,
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                );
-              },
-              itemCount: todos.length,
             );
           }
-        },
-      ),
+    
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              return MasonryGridView.builder(
+                primary: true,
+                padding: const EdgeInsets.symmetric(horizontal: 13).copyWith(
+                  bottom: 120,
+                  top: 5,
+                ),
+                mainAxisSpacing: 6,
+                crossAxisSpacing: 6,
+                gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: max(1, min(3, (constraints.maxWidth / 341).floor())),
+                ),
+                itemCount: todos.length,
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  TodoModel todo = todos[index].data();
+                  String todoId = todos[index].id;
+                  return Card(
+                    color: Colors.transparent,
+                    elevation: 0,
+                    key: Key(todoId),
+                    clipBehavior: Clip.antiAlias,
+                    margin: EdgeInsets.zero,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      side: BorderSide(
+                        color: getBorderColor(context),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
+                      child: Row(
+                        children: [
+                          Tooltip(
+                            message: todo.isCompleted ? Strings.markAsIncomplete : Strings.markAsComplete,
+                            child: Transform.scale(
+                              scale: 0.9,
+                              child: Checkbox(
+                                shape: const CircleBorder(),
+                                value: todo.isCompleted,
+                                onChanged: (val) {
+                                  updateStatusOfTodo(todoId, todo);
+                                },
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 7,
+                          ),
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                updateStatusOfTodo(todoId, todo);
+                              },
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  AnimatedLineThrough(
+                                    isCrossed: todo.isCompleted,
+                                    duration: const Duration(milliseconds: 200),
+                                    child: Text(
+                                      todo.content,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 3,
+                                  ),
+                                  if (todo.isFresh) ...[
+                                    Text(
+                                      "${Strings.createdOn2} ${FLDateFormatter().customDateTime(
+                                        inputString: "",
+                                        inputDatetime: todo.createdOn.toDate(),
+                                        outputFormat: DateTimeFormats.ddMMM,
+                                      )} at ${FLDateFormatter().customDateTime(
+                                        inputString: "",
+                                        inputDatetime: todo.createdOn.toDate(),
+                                        outputFormat: DateTimeFormats.hhmmaa,
+                                      )}",
+                                      style: const TextStyle(fontSize: 11),
+                                    ),
+                                  ] else ...[
+                                    Text(
+                                      "${Strings.lastUpdatedOn} ${FLDateFormatter().customDateTime(
+                                        inputString: "",
+                                        inputDatetime: todo.updatedOn.toDate(),
+                                        outputFormat: DateTimeFormats.ddMMM,
+                                      )} at ${FLDateFormatter().customDateTime(
+                                        inputString: "",
+                                        inputDatetime: todo.updatedOn.toDate(),
+                                        outputFormat: DateTimeFormats.hhmmaa,
+                                      )}",
+                                      style: const TextStyle(fontSize: 11),
+                                    ),
+                                  ]
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 7,
+                          ),
+                          Row(
+                            children: [
+                              IconButton(
+                                tooltip: Strings.editTask,
+                                onPressed: () {
+                                  widget.onEditTodo(todo, todoId);
+                                },
+                                icon: const FaIcon(
+                                  FontAwesomeIcons.pen,
+                                  size: 14,
+                                ),
+                              ),
+                              IconButton(
+                                tooltip: Strings.deleteTask,
+                                onPressed: () {
+                                  deleteTodo(todoId);
+                                },
+                                icon: const FaIcon(
+                                  FontAwesomeIcons.trash,
+                                  size: 14,
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+    
+                      // child: Column(
+                      //   crossAxisAlignment: CrossAxisAlignment.start,
+                      //   children: [
+                      //     GestureDetector(
+                      //       onTap: () {
+                      //         updateStatusOfTodo(todoId, todo);
+                      //       },
+                      //       child: Padding(
+                      //         padding: const EdgeInsets.symmetric(horizontal: 8),
+                      //         child: AnimatedLineThrough(
+                      //           isCrossed: todo.isCompleted,
+                      //           duration: const Duration(milliseconds: 200),
+                      //           child: Text(
+                      //             todo.content,
+                      //             style: const TextStyle(
+                      //               fontWeight: FontWeight.normal,
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //     const SizedBox(
+                      //       height: 15,
+                      //     ),
+                      //     Container(
+                      //       color: getSegmentButtonBgColor(context),
+                      //       padding: const EdgeInsets.symmetric(horizontal: 5).copyWith(right: 0),
+                      //       child: Row(
+                      //         children: [
+                      //           Tooltip(
+                      //             message: todo.isCompleted ? Strings.markAsIncomplete : Strings.markAsComplete,
+                      //             child: Transform.scale(
+                      //               scale: 0.8,
+                      //               child: Checkbox(
+                      //                 shape: RoundedRectangleBorder(
+                      //                   borderRadius: BorderRadius.circular(5),
+                      //                 ),
+                      //                 value: todo.isCompleted,
+                      //                 onChanged: (val) {
+                      //                   updateStatusOfTodo(todoId, todo);
+                      //                 },
+                      //               ),
+                      //             ),
+                      //           ),
+                      //           ...[
+                      //             if (todo.isFresh) ...[
+                      //               Expanded(
+                      //                 child: Center(
+                      //                   child: Text(
+                      //                     "${Strings.createdOn2} ${FLDateFormatter().customDateTime(
+                      //                       inputString: "",
+                      //                       inputDatetime: todo.createdOn.toDate(),
+                      //                       outputFormat: DateTimeFormats.ddMMM,
+                      //                     )} at ${FLDateFormatter().customDateTime(
+                      //                       inputString: "",
+                      //                       inputDatetime: todo.createdOn.toDate(),
+                      //                       outputFormat: DateTimeFormats.hhmmaa,
+                      //                     )}",
+                      //                     style: const TextStyle(fontSize: 12),
+                      //                   ),
+                      //                 ),
+                      //               ),
+                      //             ] else ...[
+                      //               Expanded(
+                      //                 child: Center(
+                      //                   child: Text(
+                      //                     "${Strings.lastUpdatedOn} ${FLDateFormatter().customDateTime(
+                      //                       inputString: "",
+                      //                       inputDatetime: todo.updatedOn.toDate(),
+                      //                       outputFormat: DateTimeFormats.ddMMM,
+                      //                     )} at ${FLDateFormatter().customDateTime(
+                      //                       inputString: "",
+                      //                       inputDatetime: todo.updatedOn.toDate(),
+                      //                       outputFormat: DateTimeFormats.hhmmaa,
+                      //                     )}",
+                      //                     style: const TextStyle(fontSize: 12),
+                      //                   ),
+                      //                 ),
+                      //               ),
+                      //             ]
+                      //           ],
+                      //           ...[
+                      //             IconButton(
+                      //               tooltip: Strings.editTask,
+                      //               onPressed: () {
+                      //                 widget.onEditTodo(todo, todoId);
+                      //               },
+                      //               icon: const FaIcon(
+                      //                 FontAwesomeIcons.pencil,
+                      //                 size: 14,
+                      //               ),
+                      //             ),
+                      //             IconButton(
+                      //               tooltip: Strings.deleteTask,
+                      //               onPressed: () {
+                      //                 deleteTodo(todoId);
+                      //               },
+                      //               icon: const FaIcon(
+                      //                 FontAwesomeIcons.trash,
+                      //                 size: 14,
+                      //               ),
+                      //             ),
+                      //           ]
+                      //         ],
+                      //       ),
+                      //     )
+                      //   ],
+                      // ),
+                    ),
+                  );
+                },
+              );
+            },
+          );
+        }
+      },
     );
   }
 }
@@ -235,13 +365,12 @@ List<dynamic> sortedAndFilteredList({
     (a, b) {
       TodoModel todoA = a.data();
       TodoModel todoB = b.data();
-
       switch (sortBy) {
         case SortBy.updatedOn:
           return orderBy == OrderBy.asc ? todoA.updatedOn.compareTo(todoB.updatedOn) : todoB.updatedOn.compareTo(todoA.updatedOn);
 
         case SortBy.createdOn:
-          return orderBy == OrderBy.asc ? todoA.createdOn.compareTo(todoB.updatedOn) : todoB.updatedOn.compareTo(todoA.createdOn);
+          return orderBy == OrderBy.asc ? todoA.createdOn.compareTo(todoB.createdOn) : todoB.createdOn.compareTo(todoA.createdOn);
       }
     },
   );

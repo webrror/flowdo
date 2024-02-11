@@ -57,10 +57,11 @@ class Strings {
   static const add = "Add";
   static const settings = "Settings";
   static const theme = "Theme";
-  static const darkTheme = "Dark Theme";
-  static const lightTheme = "Light Theme";
-  static const deviceTheme = "Device Theme";
+  static const darkTheme = "Dark";
+  static const lightTheme = "Light";
+  static const deviceTheme = "System";
   static const account = "Account";
+  static const appInfo = "App Info";
   static const guestUser = "Guest User ";
   static const signOut = "Sign Out";
   static const deleteAccount = "Delete Account";
@@ -77,7 +78,6 @@ class Strings {
   static const editTask = "Edit task";
   static const deleteTask = "Delete task";
 
-
   static List<String> randomNoTodosMessages = [
     "Time to blast off on your next adventure! What will you tackle first?",
     "What's your next big target?",
@@ -89,5 +89,7 @@ class Strings {
 class AppInfo {
   static const appName = "Flowdo";
   static const packageName = "com.rejie.flowdo";
-  static const appVersion = '1.0.0 Alpha 1';
+  static const appVersion = 'v1.0.0 Alpha 3';
+  static const builtWithFlutter = "Built with Flutter";
+  static const madeBy = "Jerin Jacob (@webrror)";
 }

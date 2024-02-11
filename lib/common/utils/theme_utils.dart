@@ -3,9 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 /// Method to get app's theme
-/// 
+///
 /// Pass in [Brightness] to `brightness` param
-/// 
+///
 /// Pass to `customFontFamily` if want to use different font, by default `GoogleFonts.outfit().fontFamily`
 ThemeData getAppTheme(
   BuildContext context, {
@@ -19,12 +19,13 @@ ThemeData getAppTheme(
       return ThemeData(
         fontFamily: customFontFamily,
         brightness: brightness,
-        colorSchemeSeed: Colors.blue,
+        colorSchemeSeed: Colors.indigo,
         useMaterial3: useMaterial3,
         scaffoldBackgroundColor: Colors.black,
         appBarTheme: const AppBarTheme(
           systemOverlayStyle: SystemUiOverlayStyle(
             statusBarIconBrightness: Brightness.light,
+            statusBarColor: Colors.transparent,
           ),
         ),
       );
@@ -33,10 +34,11 @@ ThemeData getAppTheme(
         brightness: brightness,
         fontFamily: customFontFamily,
         useMaterial3: useMaterial3,
-        colorSchemeSeed: Colors.blue,
+        colorSchemeSeed: Colors.indigo,
         appBarTheme: const AppBarTheme(
           systemOverlayStyle: SystemUiOverlayStyle(
             statusBarIconBrightness: Brightness.dark,
+            statusBarColor: Colors.transparent,
           ),
         ),
       );
@@ -45,37 +47,29 @@ ThemeData getAppTheme(
 
 // Misc methods
 Color getSurfaceColor(BuildContext context) {
-  switch (Theme.of(context).brightness) {
-    case Brightness.dark:
-      return Colors.white.withOpacity(0.005);
-    case Brightness.light:
-      return Colors.white.withOpacity(0);
-  }
+  return Theme.of(context).brightness == Brightness.dark
+      ? Colors.white.withOpacity(0.005)
+      : Colors.white.withOpacity(0);
 }
 
 Color getBarrierColor(BuildContext context) {
-  switch (Theme.of(context).brightness) {
-    case Brightness.dark:
-      return Colors.black.withOpacity(0.15);
-    case Brightness.light:
-      return Colors.white.withOpacity(0.1);
-  }
+  return Theme.of(context).brightness == Brightness.dark
+      ? Colors.black.withOpacity(0.15)
+      : Colors.white.withOpacity(0.1);
 }
 
 Color getBorderColor(BuildContext context) {
-  switch (Theme.of(context).brightness) {
-    case Brightness.dark:
-      return Colors.white10;
-    case Brightness.light:
-      return Colors.black12;
-  }
+  return Theme.of(context).brightness == Brightness.dark
+      ? Colors.white10
+      : Colors.black12;
 }
 
 Color getSegmentButtonBgColor(BuildContext context) {
-  switch (Theme.of(context).brightness) {
-    case Brightness.dark:
-      return Colors.white10;
-    case Brightness.light:
-      return Colors.white24;
-  }
+  return Colors.white10;
+}
+
+Color getAppBlurColor(BuildContext context) {
+  return Theme.of(context).brightness == Brightness.dark
+      ? Colors.black12
+      : Colors.white54;
 }

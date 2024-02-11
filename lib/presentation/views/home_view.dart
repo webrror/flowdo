@@ -133,7 +133,7 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
                         minLines: null,
                         decoration: InputDecoration(
                           contentPadding: const EdgeInsets.symmetric(
-                            vertical: 0,
+                            vertical: 5,
                             horizontal: 12,
                           ),
                           enabledBorder: buildBorder(),
@@ -180,8 +180,8 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
   void showSettingsSheet(User user) {
     showGlassBottomSheet(
       context,
-      maxHeight: getScreenHeight(context) * 0.5,
-      minHeight: getScreenHeight(context) * 0.5,
+      maxHeight: getScreenHeight(context) * 0.51,
+      minHeight: getScreenHeight(context) * 0.51,
       sheetTitle: Strings.settings,
       buildSheet: [
         Padding(
@@ -201,38 +201,41 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
               ),
               Consumer<ThemeServices>(
                 builder: (context, value, child) {
-                  return SegmentedButton<ThemeMode>(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateColor.resolveWith(
-                        (states) => getSegmentButtonBgColor(context),
+                  return SizedBox(
+                    width: getScreenWidth(context),
+                    child: SegmentedButton<ThemeMode>(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateColor.resolveWith(
+                          (states) => getSegmentButtonBgColor(context),
+                        ),
                       ),
+                      segments: const [
+                        ButtonSegment<ThemeMode>(
+                          value: ThemeMode.dark,
+                          label: Text(Strings.darkTheme),
+                          icon: Icon(Icons.dark_mode),
+                        ),
+                        ButtonSegment<ThemeMode>(
+                          value: ThemeMode.light,
+                          label: Text(Strings.lightTheme),
+                          icon: Icon(Icons.light_mode),
+                        ),
+                        ButtonSegment<ThemeMode>(
+                          value: ThemeMode.system,
+                          label: Text(Strings.deviceTheme),
+                          icon: Icon(Icons.phone_android),
+                        )
+                      ],
+                      selected: {value.currentTheme},
+                      onSelectionChanged: (themeOption) async {
+                        try {
+                          value.toggleTheme(themeOption.first);
+                        } catch (e) {
+                          debugPrint(e.toString());
+                          showErrorToast(context);
+                        }
+                      },
                     ),
-                    segments: const [
-                      ButtonSegment<ThemeMode>(
-                        value: ThemeMode.dark,
-                        label: Text(Strings.darkTheme),
-                        icon: Icon(Icons.dark_mode),
-                      ),
-                      ButtonSegment<ThemeMode>(
-                        value: ThemeMode.light,
-                        label: Text(Strings.lightTheme),
-                        icon: Icon(Icons.light_mode),
-                      ),
-                      ButtonSegment<ThemeMode>(
-                        value: ThemeMode.system,
-                        label: Text(Strings.deviceTheme),
-                        icon: Icon(Icons.phone_android),
-                      )
-                    ],
-                    selected: {value.currentTheme},
-                    onSelectionChanged: (themeOption) async {
-                      try {
-                        value.toggleTheme(themeOption.first);
-                      } catch (e) {
-                        debugPrint(e.toString());
-                        showErrorToast(context);
-                      }
-                    },
                   );
                 },
               ),
@@ -258,48 +261,67 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
                 ),
               ] else ...[
                 Text(
-                  "${user.displayName}",
-                  style: const TextStyle(
-                    fontSize: 13,
-                  ),
-                ),
-                Text(
-                  "${user.email}",
-                  style: const TextStyle(
-                    fontSize: 13,
-                  ),
+                  "${user.displayName?.trim()} (${user.email})",
+                  style: const TextStyle(fontSize: 13),
                 ),
               ],
               const SizedBox(
-                height: 30,
+                height: 15,
               ),
-              Align(
-                alignment: Alignment.center,
-                child: StadiumButton(
-                  onTap: () {
-                    context.read<FirebaseAuthMethods>().signOut(context);
-                    Navigator.pop(context);
-                  },
-                  content: const Text(Strings.signOut),
+              const Text(
+                Strings.appInfo,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
                 ),
               ),
               const SizedBox(
-                height: 15,
+                height: 8,
               ),
-              Align(
-                alignment: Alignment.center,
-                child: StadiumButton(
-                  onTap: () {
-                    Navigator.pop(context);
-                    showAccDeleteSheet();
-                  },
-                  content: Text(
-                    Strings.deleteAccount,
-                    style: TextStyle(color: Theme.of(context).colorScheme.error),
-                  ),
-                  bgColor: Colors.red.withOpacity(0.1),
-                  borderColor: Colors.redAccent.withOpacity(0.2),
+              const Text(
+                AppInfo.appVersion,
+                style: TextStyle(
+                  fontSize: 13,
                 ),
+              ),
+              const Text(
+                AppInfo.appName,
+                style: TextStyle(
+                  fontSize: 13,
+                ),
+              ),
+              const Text(
+                AppInfo.packageName,
+                style: TextStyle(
+                  fontSize: 13,
+                ),
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  StadiumButton(
+                    onTap: () {
+                      context.read<FirebaseAuthMethods>().signOut(context);
+                      Navigator.pop(context);
+                    },
+                    content: const Text(Strings.signOut),
+                  ),
+                  StadiumButton(
+                    onTap: () {
+                      Navigator.pop(context);
+                      showAccDeleteSheet();
+                    },
+                    content: Text(
+                      Strings.deleteAccount,
+                      style: TextStyle(color: Theme.of(context).colorScheme.error),
+                    ),
+                    bgColor: Colors.red.withOpacity(0.1),
+                    borderColor: Colors.redAccent.withOpacity(0.2),
+                  ),
+                ],
               ),
             ],
           ),
@@ -312,8 +334,8 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
     showGlassBottomSheet(
       context,
       sheetTitle: Strings.areYouSureWantToDelete,
-      maxHeight: getScreenHeight(context) * 0.34,
-      minHeight: getScreenHeight(context) * 0.34,
+      maxHeight: getScreenHeight(context) * 0.32,
+      minHeight: getScreenHeight(context) * 0.32,
       buildSheet: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -321,12 +343,15 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              const SizedBox(
+                height: 50,
+              ),
               const Text(
                 Strings.permanentAction,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontWeight: FontWeight.normal,
-                  fontSize: 16,
+                  fontSize: 15,
                 ),
               ),
               const SizedBox(
@@ -459,165 +484,162 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
   Widget build(BuildContext context) {
     final user = context.read<FirebaseAuthMethods>().user;
     return Scaffold(
-      appBar: AppBar(
-        flexibleSpace: ClipRRect(
-          borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(15),
-            bottomRight: Radius.circular(15),
-          ),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-            child: Container(
-              color: Colors.transparent,
-            ),
-          ),
-        ),
-        backgroundColor: Colors.transparent,
-        forceMaterialTransparency: true,
-        title: const Text(
-          AppInfo.appName,
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        centerTitle: false,
-        actions: [
-          Tooltip(
-            message: Strings.preferences,
-            child: InkWell(
-              customBorder: const CircleBorder(),
-              onTap: () {
-                showSettingsSheet(user);
-                _settingsIconAnimationController.forward(from: 0);
-              },
-              onLongPress: () {
-                _settingsIconAnimationController.forward(from: 0);
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(7.0),
-                child: const FaIcon(
-                  FontAwesomeIcons.gear,
-                  size: 18,
-                )
-                    .animate(
-                      controller: _settingsIconAnimationController,
-                      onPlay: (controller) => controller.stop(),
-                    )
-                    .rotate(duration: 500.ms),
-              ),
-            ),
-          ),
-          const SizedBox(
-            width: 10,
-          ),
-        ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(40),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15).copyWith(bottom: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Theme(
-                  data: Theme.of(context).copyWith(
-                    splashColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    hoverColor: Colors.transparent,
-                  ),
-                  child: PopupMenuButton(
-                    tooltip: Strings.filter,
-                    position: PopupMenuPosition.under,
-                    offset: const Offset(0, 6),
-                    elevation: 1,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                    child: StadiumButton(
-                      verticalPadding: 3,
-                      horizontalPadding: 14,
-                      onTap: null,
-                      content: Row(
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.only(right: 8),
-                            child: FaIcon(
-                              FontAwesomeIcons.filter,
-                              size: 11,
-                            ),
-                          ),
-                          Text(selectedFilter.name),
-                          const Padding(
-                            padding: EdgeInsets.only(left: 8),
-                            child: FaIcon(
-                              FontAwesomeIcons.chevronDown,
-                              size: 8,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    itemBuilder: (context) {
-                      return FilterOptions.values.map((e) {
-                        return PopupMenuItem(
-                          onTap: () {
-                            setState(() {
-                              selectedFilter = e;
-                            });
-                          },
-                          child: Text(e.name),
-                        );
-                      }).toList();
-                    },
-                  ),
-                ),
-                StadiumButton(
-                  tooltip: Strings.sort,
-                  verticalPadding: 3,
-                  horizontalPadding: 14,
-                  onTap: () {
-                    showSortSheet();
-                  },
-                  content: Row(
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.only(right: 8),
-                        child: FaIcon(
-                          FontAwesomeIcons.sort,
-                          size: 12,
-                        ),
-                      ),
-                      Text("${sortBy.name} - ${sortOrder.name}"),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-      extendBodyBehindAppBar: true,
       body: Stack(
         children: [
           const BlobBackground(),
           ClipRRect(
             child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 50.0, sigmaY: 50.0, tileMode: TileMode.clamp),
-              child: SizedBox(
+              filter: ImageFilter.blur(sigmaX: 80.0, sigmaY: 80.0, tileMode: TileMode.clamp),
+              child: Container(
                 height: getScreenHeight(context),
                 width: getScreenWidth(context),
+                color: getAppBlurColor(context),
               ),
             ),
           ),
-          HomeBody(
-            service: service,
-            onEditTodo: (todo, id) {
-              _contentController.text = todo.content;
-              showAddSheet(todoForUpdate: todo, id: id);
-            },
-            filterOption: selectedFilter,
-            sortBy: sortBy,
-            orderBy: sortOrder,
+          CustomScrollView(
+            primary: false,
+            physics: const NeverScrollableScrollPhysics(),
+            slivers: [
+              SliverAppBar(
+                pinned: false,
+                backgroundColor: Colors.white10,
+                forceMaterialTransparency: true,
+                title: const Text(
+                  AppInfo.appName,
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                centerTitle: false,
+                actions: [
+                  Tooltip(
+                    message: Strings.preferences,
+                    child: InkWell(
+                      customBorder: const CircleBorder(),
+                      onTap: () {
+                        showSettingsSheet(user);
+                        _settingsIconAnimationController.forward(from: 0);
+                      },
+                      onLongPress: () {
+                        _settingsIconAnimationController.forward(from: 0);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(7.0),
+                        child: const FaIcon(
+                          FontAwesomeIcons.gear,
+                          size: 18,
+                        )
+                            .animate(
+                              controller: _settingsIconAnimationController,
+                              onPlay: (controller) => controller.stop(),
+                            )
+                            .rotate(duration: 500.ms),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                ],
+                bottom: PreferredSize(
+                  preferredSize: const Size.fromHeight(40),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15).copyWith(bottom: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Theme(
+                          data: Theme.of(context).copyWith(
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                            hoverColor: Colors.transparent,
+                          ),
+                          child: PopupMenuButton(
+                            tooltip: Strings.filter,
+                            position: PopupMenuPosition.under,
+                            offset: const Offset(0, 6),
+                            elevation: 1,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                            child: StadiumButton(
+                              verticalPadding: 3,
+                              horizontalPadding: 14,
+                              onTap: null,
+                              content: Row(
+                                children: [
+                                  const Padding(
+                                    padding: EdgeInsets.only(right: 8),
+                                    child: FaIcon(
+                                      FontAwesomeIcons.filter,
+                                      size: 11,
+                                    ),
+                                  ),
+                                  Text(selectedFilter.name),
+                                  const Padding(
+                                    padding: EdgeInsets.only(left: 8),
+                                    child: FaIcon(
+                                      FontAwesomeIcons.chevronDown,
+                                      size: 8,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            itemBuilder: (context) {
+                              return FilterOptions.values.map((e) {
+                                return PopupMenuItem(
+                                  onTap: () {
+                                    setState(() {
+                                      selectedFilter = e;
+                                    });
+                                  },
+                                  child: Text(e.name),
+                                );
+                              }).toList();
+                            },
+                          ),
+                        ),
+                        StadiumButton(
+                          tooltip: Strings.sort,
+                          verticalPadding: 3,
+                          horizontalPadding: 14,
+                          onTap: () {
+                            showSortSheet();
+                          },
+                          content: Row(
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.only(right: 8),
+                                child: FaIcon(
+                                  FontAwesomeIcons.sort,
+                                  size: 12,
+                                ),
+                              ),
+                              Text("${sortBy.name} - ${sortOrder.name}"),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              SliverFillRemaining(
+                child: HomeBody(
+                  service: service,
+                  onEditTodo: (todo, id) {
+                    _contentController.text = todo.content;
+                    showAddSheet(todoForUpdate: todo, id: id);
+                  },
+                  filterOption: selectedFilter,
+                  sortBy: sortBy,
+                  orderBy: sortOrder,
+                ),
+              ),
+            ],
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        elevation: 2,
+        elevation: 1,
         tooltip: Strings.addNewTask,
         shape: const CircleBorder(),
         clipBehavior: Clip.antiAlias,

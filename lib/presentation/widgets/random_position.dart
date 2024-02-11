@@ -1,30 +1,39 @@
-import 'dart:math' as math;
-import 'package:flowdo/common/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_animate/flutter_animate.dart';
+// import 'package:flutter_animate/flutter_animate.dart';
 import 'package:jovial_svg/jovial_svg.dart';
 
-class RandomPositionedWidget extends StatefulWidget {
-  const RandomPositionedWidget({super.key, required this.assetPath});
+class FLPositionedWidget extends StatefulWidget {
+  const FLPositionedWidget({
+    super.key,
+    required this.assetPath,
+    this.customTop,
+    this.customLeft,
+    this.customRight,
+    this.customBottom,
+    this.rotate,
+  });
   final String assetPath;
-
+  final double? customTop;
+  final double? customLeft;
+  final double? customRight;
+  final double? customBottom;
+  final double? rotate;
   @override
-  State<RandomPositionedWidget> createState() => _RandomPositionedWidgetState();
+  State<FLPositionedWidget> createState() => _RandomPositionedWidgetState();
 }
 
-class _RandomPositionedWidgetState extends State<RandomPositionedWidget> {
-  math.Random random = math.Random();
-  double top = 0.0;
-  double left = 0.0;
+class _RandomPositionedWidgetState extends State<FLPositionedWidget> {
   ScalableImage? scalableImage;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      top = (random.nextDouble() * (getScreenHeight(context) - 400).clamp(0, double.infinity)).abs();
-      left = (random.nextDouble() * (getScreenWidth(context) - 400).clamp(0, double.infinity)).abs();
+      // Not so random position widget anymore
+      // For now, postitons are static
+      // top = (random.nextDouble() * (getScreenHeight(context) - 400).clamp(0, double.infinity)).abs();
+      // left = (random.nextDouble() * (getScreenWidth(context) - 400).clamp(0, double.infinity)).abs();
       setScalableImage();
     });
   }
@@ -34,7 +43,6 @@ class _RandomPositionedWidgetState extends State<RandomPositionedWidget> {
       rootBundle,
       widget.assetPath,
     );
-
     setState(() {});
   }
 
@@ -42,23 +50,29 @@ class _RandomPositionedWidgetState extends State<RandomPositionedWidget> {
   Widget build(BuildContext context) {
     if (scalableImage != null) {
       return Positioned(
-        top: top,
-        left: left,
-        child: SizedBox(
-          width: 500,
-          height: 500,
-          child: ScalableImageWidget(
-            si: scalableImage!,
-          ),
-        )
-            .animate(
-              onPlay: (controller) => controller.reverse().then(
-                    (value) => controller.repeat(),
-                  ),
-            )
-            // .fade(duration: 10.seconds)
-            .rotate(duration: 40.seconds),
-      );
+          top: widget.customTop,
+          left: widget.customLeft,
+          bottom: widget.customBottom,
+          right: widget.customRight,
+          child: SizedBox(
+            width: 370,
+            height: 370,
+            child: Transform.rotate(
+              angle: widget.rotate ?? 0,
+              child: ScalableImageWidget(
+                si: scalableImage!,
+              ),
+            ),
+          )
+          //! Removed animation for now, need a better way
+          // .animate(
+          //   onPlay: (controller) => controller.reverse().then(
+          //         (value) => controller.repeat(),
+          //       ),
+          // )
+          // // .fade(duration: 10.seconds)
+          // .rotate(duration: 40.seconds),
+          );
     } else {
       return const SizedBox();
     }
