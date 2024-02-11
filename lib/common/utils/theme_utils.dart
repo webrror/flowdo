@@ -22,6 +22,16 @@ ThemeData getAppTheme(
         colorSchemeSeed: Colors.indigo,
         useMaterial3: useMaterial3,
         scaffoldBackgroundColor: Colors.black,
+        segmentedButtonTheme: SegmentedButtonThemeData(
+          style: ButtonStyle(
+            backgroundColor: MaterialStateColor.resolveWith(
+              (states) => Colors.white10,
+            ),
+          ),
+        ),
+        bottomSheetTheme: BottomSheetThemeData(
+          modalBarrierColor: Colors.black.withOpacity(0.15),
+        ),
         appBarTheme: const AppBarTheme(
           systemOverlayStyle: SystemUiOverlayStyle(
             statusBarIconBrightness: Brightness.light,
@@ -35,6 +45,16 @@ ThemeData getAppTheme(
         fontFamily: customFontFamily,
         useMaterial3: useMaterial3,
         colorSchemeSeed: Colors.indigo,
+        segmentedButtonTheme: SegmentedButtonThemeData(
+          style: ButtonStyle(
+            backgroundColor: MaterialStateColor.resolveWith(
+              (states) => Colors.white10,
+            ),
+          ),
+        ),
+        bottomSheetTheme: BottomSheetThemeData(
+          modalBarrierColor: Colors.white.withOpacity(0.08),
+        ),
         appBarTheme: const AppBarTheme(
           systemOverlayStyle: SystemUiOverlayStyle(
             statusBarIconBrightness: Brightness.dark,
@@ -47,29 +67,13 @@ ThemeData getAppTheme(
 
 // Misc methods
 Color getSurfaceColor(BuildContext context) {
-  return Theme.of(context).brightness == Brightness.dark
-      ? Colors.white.withOpacity(0.005)
-      : Colors.white.withOpacity(0);
-}
-
-Color getBarrierColor(BuildContext context) {
-  return Theme.of(context).brightness == Brightness.dark
-      ? Colors.black.withOpacity(0.15)
-      : Colors.white.withOpacity(0.1);
+  return Colors.transparent;
 }
 
 Color getBorderColor(BuildContext context) {
-  return Theme.of(context).brightness == Brightness.dark
-      ? Colors.white10
-      : Colors.black12;
-}
-
-Color getSegmentButtonBgColor(BuildContext context) {
-  return Colors.white10;
+  return Theme.of(context).brightness == Brightness.dark ? Colors.white10 : Colors.black12;
 }
 
 Color getAppBlurColor(BuildContext context) {
-  return Theme.of(context).brightness == Brightness.dark
-      ? Colors.black12
-      : Colors.white54;
+  return Theme.of(context).brightness == Brightness.dark ? Colors.black12 : Colors.white54;
 }

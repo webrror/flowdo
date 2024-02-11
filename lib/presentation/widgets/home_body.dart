@@ -60,6 +60,9 @@ class _HomeBodyState extends State<HomeBody> {
     }
   }
 
+  /// Random index used to show random String from `randomNoTodosMessages` array/list
+  int randomIndex = Random().nextInt(Strings.randomNoTodosMessages.length);
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -74,10 +77,11 @@ class _HomeBodyState extends State<HomeBody> {
         } else if (!snapshot.hasData || (snapshot.data?.docs.isEmpty ?? true)) {
           return Center(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 30),
               child: Text(
-                Strings.randomNoTodosMessages[Random().nextInt(Strings.randomNoTodosMessages.length)],
+                Strings.randomNoTodosMessages[randomIndex],
                 textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 15),
               ),
             ),
           );
@@ -96,7 +100,7 @@ class _HomeBodyState extends State<HomeBody> {
               ),
             );
           }
-    
+
           return LayoutBuilder(
             builder: (context, constraints) {
               return MasonryGridView.builder(
@@ -128,6 +132,7 @@ class _HomeBodyState extends State<HomeBody> {
                       ),
                     ),
                     child: Padding(
+                      // padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 8).copyWith(top: 8, bottom: 0, left: 0, right: 0),
                       padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
                       child: Row(
                         children: [
@@ -228,7 +233,7 @@ class _HomeBodyState extends State<HomeBody> {
                           )
                         ],
                       ),
-    
+
                       // child: Column(
                       //   crossAxisAlignment: CrossAxisAlignment.start,
                       //   children: [
@@ -261,11 +266,9 @@ class _HomeBodyState extends State<HomeBody> {
                       //           Tooltip(
                       //             message: todo.isCompleted ? Strings.markAsIncomplete : Strings.markAsComplete,
                       //             child: Transform.scale(
-                      //               scale: 0.8,
+                      //               scale: 0.9,
                       //               child: Checkbox(
-                      //                 shape: RoundedRectangleBorder(
-                      //                   borderRadius: BorderRadius.circular(5),
-                      //                 ),
+                      //                 shape: const CircleBorder(),
                       //                 value: todo.isCompleted,
                       //                 onChanged: (val) {
                       //                   updateStatusOfTodo(todoId, todo);

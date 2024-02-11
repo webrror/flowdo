@@ -26,7 +26,6 @@ Future<T?> showGlassBottomSheet<T>(
     context: context,
     isScrollControlled: true,
     isDismissible: isDismissible,
-    barrierColor: getBarrierColor(context),
     backgroundColor: Colors.transparent,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.only(

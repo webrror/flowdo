@@ -83,6 +83,10 @@ class Strings {
     "What's your next big target?",
     "Fresh start! Your to-do list awaits your next adventure.",
     "What will you blast off to achieve next?",
+    "The list takes a break, but you never stop! Let's conquer the next challenge!",
+    "Clear coast ahead! Your to-do list is ready for your next big thing.",
+    "Seize the day! What adventure awaits you just beyond the horizon?",
+    "Remember that dream you put on hold? Today's the perfect day to revisit it."
   ];
 }
 

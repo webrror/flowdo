@@ -204,11 +204,6 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
                   return SizedBox(
                     width: getScreenWidth(context),
                     child: SegmentedButton<ThemeMode>(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateColor.resolveWith(
-                          (states) => getSegmentButtonBgColor(context),
-                        ),
-                      ),
                       segments: const [
                         ButtonSegment<ThemeMode>(
                           value: ThemeMode.dark,
