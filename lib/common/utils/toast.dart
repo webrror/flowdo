@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuthException;
 import 'package:flowdo/common/constants/constants.dart';
-import 'package:flowdo/common/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -26,7 +25,7 @@ class FLToast {
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
           child: Container(
-            width: getScreenWidth(context),
+            width: 500,
             padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 12.0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8.0),
