@@ -774,6 +774,7 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
                   service: service,
                   onEditTodo: (todo, id) {
                     _contentController.text = todo.content;
+                    selectedCategory = todo.categories;
                     showAddSheet(todoForUpdate: todo, id: id);
                   },
                   filterOption: selectedFilter,
