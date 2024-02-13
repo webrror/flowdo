@@ -26,6 +26,7 @@ class FirebaseAuthMethods {
   /// After signing in, creates a document with `id` same as `user.userId`
   Future<void> signInWithGoogle(BuildContext context) async {
     try {
+      showSuccessToast(context, Strings.signingIn);
       if (kIsWeb) {
         GoogleAuthProvider provider = GoogleAuthProvider();
         provider.addScope(Strings.profileScope);
@@ -84,6 +85,7 @@ class FirebaseAuthMethods {
   /// After signing in, creates a document with `id` same as `user.userId`
   Future<void> signInAsAGuest(BuildContext context) async {
     try {
+      showSuccessToast(context, Strings.signingIn);
       await _auth.signInAnonymously().then((value) {
         showSuccessToast(
           context,
