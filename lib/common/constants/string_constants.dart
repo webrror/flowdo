@@ -43,7 +43,9 @@ class Strings {
   static const signedOut = "Signed out";
 
   static const signInWithGoogle = "Sign in with Google";
-  static const signInAsGuest = "Sign as a guest";
+  static const signInAsGuest = "Sign in as a guest";
+  static const warningForGuest =
+      "For users signing in as guest, any settings, progress, or entered information won't be saved and will be lost when you leave. Consider creating an account to personalize your experience and keep your data.";
   static const or = "OR";
   static const taskAddedSuccessfully = "Task added successfully";
   static const taskUpdatedSuccessfully = "Task updated successfully";

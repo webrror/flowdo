@@ -173,7 +173,7 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
                               offset: const Offset(0, 6),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                               position: PopupMenuPosition.under,
-                              child: StadiumButton(
+                              child: FLButton(
                                 onTap: null,
                                 horizontalPadding: 10,
                                 verticalPadding: 5,
@@ -226,7 +226,7 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
                             ),
                           );
                         }),
-                        StadiumButton(
+                        FLButton(
                           onTap: () {
                             FocusManager.instance.primaryFocus?.unfocus();
                             if (_formKey.currentState!.validate()) {
@@ -382,14 +382,8 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  StadiumButton(
-                    onTap: () {
-                      context.read<FirebaseAuthMethods>().signOut(context);
-                      Navigator.pop(context);
-                    },
-                    content: const Text(Strings.signOut),
-                  ),
-                  StadiumButton(
+                  
+                  FLButton(
                     onTap: () {
                       Navigator.pop(context);
                       showAccDeleteSheet();
@@ -400,6 +394,13 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
                     ),
                     bgColor: Colors.red.withOpacity(0.1),
                     borderColor: Colors.redAccent.withOpacity(0.2),
+                  ),
+                  FLButton(
+                    onTap: () {
+                      context.read<FirebaseAuthMethods>().signOut(context);
+                      Navigator.pop(context);
+                    },
+                    content: const Text(Strings.signOut),
                   ),
                 ],
               ),
@@ -441,7 +442,7 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
               const SizedBox(
                 height: 20,
               ),
-              StadiumButton(
+              FLButton(
                 onTap: () async {
                   await context.read<FirebaseAuthMethods>().deleteAccount(context).then((value) {
                     Navigator.pop(context);
@@ -544,7 +545,7 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
                 ),
                 Align(
                   alignment: Alignment.centerRight,
-                  child: StadiumButton(
+                  child: FLButton(
                     onTap: () {
                       Navigator.pop(context, true);
                     },
@@ -643,7 +644,7 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
                             position: PopupMenuPosition.under,
                             offset: const Offset(0, 6),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                            child: StadiumButton(
+                            child: FLButton(
                               verticalPadding: 3,
                               horizontalPadding: 14,
                               onTap: null,
@@ -744,7 +745,7 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
                             },
                           ),
                         ),
-                        StadiumButton(
+                        FLButton(
                           tooltip: Strings.sort,
                           verticalPadding: 3,
                           horizontalPadding: 14,
