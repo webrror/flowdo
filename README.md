@@ -12,10 +12,8 @@
 
 ### Screens
 
-<img src="screens/1.png" height="450">
-<img src="screens/2.png" height="450">
-<img src="screens/3.png" height="450">
-<img src="screens/4.png" height="450">
+<img src="screens/1.png" height="450"><img src="screens/2.png" height="450">
+<img src="screens/3.png" height="450"><img src="screens/4.png" height="450">
 
 ### Development Stack
 - <a href="https://flutter.dev/">**Flutter**</a>
