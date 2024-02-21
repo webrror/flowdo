@@ -34,35 +34,21 @@ class HomeBody extends StatefulWidget {
 class _HomeBodyState extends State<HomeBody> {
   /// Mark complete/incomplete a todo handler
   updateStatusOfTodo(String id, TodoModel todo) async {
-    try {
-      TodoModel todoUpdate = todo.copyWith(
-        isCompleted: !todo.isCompleted,
-        updatedOn: Timestamp.now(),
-        isFresh: false,
-      );
-      await widget.service.updateTodo(id, todoUpdate).then((value) {
-        showSuccessToast(context, Strings.taskUpdatedSuccessfully);
-      });
-    } catch (e) {
-      debugPrint(e.toString());
-      if (context.mounted) {
-        showErrorToast(context);
-      }
-    }
+    TodoModel todoUpdate = todo.copyWith(
+      isCompleted: !todo.isCompleted,
+      updatedOn: Timestamp.now(),
+      isFresh: false,
+    );
+    await widget.service.updateTodo(id, todoUpdate).then((value) {
+      showSuccessToast(context, Strings.taskUpdatedSuccessfully);
+    });
   }
 
   /// Delete handler
   deleteTodo(String id) async {
-    try {
-      await widget.service.deleteTodo(id).then((value) {
-        showSuccessToast(context, Strings.taskDeletedSuccessfully);
-      });
-    } catch (e) {
-      debugPrint(e.toString());
-      if (context.mounted) {
-        showErrorToast(context);
-      }
-    }
+    await widget.service.deleteTodo(id).then((value) {
+      showSuccessToast(context, Strings.taskDeletedSuccessfully);
+    });
   }
 
   /// Random index used to show random String from `randomNoTodosMessages` array/list
@@ -279,7 +265,12 @@ class _HomeBodyState extends State<HomeBody> {
                             children: [
                               GestureDetector(
                                 onTap: () {
-                                  updateStatusOfTodo(todoId, todo);
+                                  try {
+                                    updateStatusOfTodo(todoId, todo);
+                                  } catch (e) {
+                                    debugPrint(e.toString());
+                                    showErrorToast(context);
+                                  }
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -318,7 +309,12 @@ class _HomeBodyState extends State<HomeBody> {
                                           shape: const CircleBorder(),
                                           value: todo.isCompleted,
                                           onChanged: (val) {
-                                            updateStatusOfTodo(todoId, todo);
+                                            try {
+                                              updateStatusOfTodo(todoId, todo);
+                                            } catch (e) {
+                                              debugPrint(e.toString());
+                                              showErrorToast(context);
+                                            }
                                           },
                                         ),
                                       ),
@@ -374,7 +370,12 @@ class _HomeBodyState extends State<HomeBody> {
                                       IconButton(
                                         tooltip: Strings.deleteTask,
                                         onPressed: () {
-                                          deleteTodo(todoId);
+                                          try {
+                                            deleteTodo(todoId);
+                                          } catch (e) {
+                                            debugPrint(e.toString());
+                                            showErrorToast(context);
+                                          }
                                         },
                                         icon: const FaIcon(
                                           FontAwesomeIcons.trash,

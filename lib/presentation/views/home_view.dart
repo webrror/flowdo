@@ -56,49 +56,35 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
 
   /// Create handler
   createNewTodo() async {
-    try {
-      TodoModel todo = TodoModel(
-        content: _contentController.text,
-        isCompleted: false,
-        createdOn: Timestamp.now(),
-        updatedOn: Timestamp.now(),
-        isFresh: true,
-        categories: selectedCategory,
-      );
+    TodoModel todo = TodoModel(
+      content: _contentController.text,
+      isCompleted: false,
+      createdOn: Timestamp.now(),
+      updatedOn: Timestamp.now(),
+      isFresh: true,
+      categories: selectedCategory,
+    );
 
-      await service.addTodo(todo).then((value) {
-        Navigator.pop(context);
-        _contentController.clear();
-        showSuccessToast(context, Strings.taskAddedSuccessfully);
-      });
-    } catch (e) {
-      debugPrint(e.toString());
-      if (context.mounted) {
-        showErrorToast(context);
-      }
-    }
+    await service.addTodo(todo).then((value) {
+      Navigator.pop(context);
+      _contentController.clear();
+      showSuccessToast(context, Strings.taskAddedSuccessfully);
+    });
   }
 
   /// Update handler
   updateTodo(String id, TodoModel todo) async {
-    try {
-      TodoModel todoUpdate = todo.copyWith(
-        content: _contentController.text.trim(),
-        updatedOn: Timestamp.now(),
-        isFresh: false,
-        categories: selectedCategory,
-      );
-      await service.updateTodo(id, todoUpdate).then((value) {
-        Navigator.pop(context);
-        _contentController.clear();
-        showSuccessToast(context, Strings.taskUpdatedSuccessfully);
-      });
-    } catch (e) {
-      debugPrint(e.toString());
-      if (context.mounted) {
-        showErrorToast(context);
-      }
-    }
+    TodoModel todoUpdate = todo.copyWith(
+      content: _contentController.text.trim(),
+      updatedOn: Timestamp.now(),
+      isFresh: false,
+      categories: selectedCategory,
+    );
+    await service.updateTodo(id, todoUpdate).then((value) {
+      Navigator.pop(context);
+      _contentController.clear();
+      showSuccessToast(context, Strings.taskUpdatedSuccessfully);
+    });
   }
 
   OutlineInputBorder buildBorder() {
@@ -114,7 +100,7 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
       context,
       sheetTitle: isEdit ? Strings.updateYourTask : Strings.addATask,
       maxHeight: getScreenHeight(context) * 0.5,
-      isDismissible: false,
+      isDismissible: true,
       buildSheet: [
         Flexible(
           child: Form(
@@ -230,14 +216,19 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
                           onTap: () {
                             FocusManager.instance.primaryFocus?.unfocus();
                             if (_formKey.currentState!.validate()) {
-                              if (isEdit) {
-                                if (id != null) {
-                                  updateTodo(id, todoForUpdate);
+                              try {
+                                if (isEdit) {
+                                  if (id != null) {
+                                    updateTodo(id, todoForUpdate);
+                                  } else {
+                                    return;
+                                  }
                                 } else {
-                                  return;
+                                  createNewTodo();
                                 }
-                              } else {
-                                createNewTodo();
+                              } catch (e) {
+                                debugPrint(e.toString());
+                                showErrorToast(context);
                               }
                             }
                           },
@@ -382,7 +373,6 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  
                   FLButton(
                     onTap: () {
                       Navigator.pop(context);
@@ -419,43 +409,45 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
     showGlassBottomSheet(
       context,
       sheetTitle: Strings.areYouSureWantToDelete,
-      maxHeight: getScreenHeight(context) * 0.32,
-      minHeight: getScreenHeight(context) * 0.32,
+      maxHeight: getScreenHeight(context) * 0.38,
+      minHeight: getScreenHeight(context) * 0.38,
       buildSheet: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(
-                height: 50,
-              ),
-              const Text(
-                Strings.permanentAction,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.normal,
-                  fontSize: 15,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(
+                  height: 50,
                 ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              FLButton(
-                onTap: () async {
-                  await context.read<FirebaseAuthMethods>().deleteAccount(context).then((value) {
-                    Navigator.pop(context);
-                  });
-                },
-                content: Text(
-                  Strings.deleteAccount,
-                  style: TextStyle(color: Theme.of(context).colorScheme.error),
+                const Text(
+                  Strings.permanentAction,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontSize: 15,
+                  ),
                 ),
-                bgColor: Colors.red.withOpacity(0.1),
-                borderColor: Colors.redAccent.withOpacity(0.2),
-              ),
-            ],
+                const SizedBox(
+                  height: 30,
+                ),
+                FLButton(
+                  onTap: () async {
+                    await context.read<FirebaseAuthMethods>().deleteAccount(context).then((value) {
+                      Navigator.pop(context);
+                    });
+                  },
+                  content: Text(
+                    Strings.deleteAccount,
+                    style: TextStyle(color: Theme.of(context).colorScheme.error),
+                  ),
+                  bgColor: Colors.red.withOpacity(0.1),
+                  borderColor: Colors.redAccent.withOpacity(0.2),
+                ),
+              ],
+            ),
           ),
         ),
       ],
