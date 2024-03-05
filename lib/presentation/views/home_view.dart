@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:quick_actions/quick_actions.dart';
 
 final _formKey = GlobalKey<FormState>();
 
@@ -36,6 +37,7 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
   SortBy sortBy = SortBy.createdOn;
   // Category
   TodoCategories selectedCategory = TodoCategories.general;
+  Future<void>? _bottomSheetFuture;
 
   @override
   void initState() {
@@ -44,6 +46,21 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
       vsync: this,
       duration: 500.ms,
     );
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      const QuickActions quickActions = QuickActions();
+      quickActions.initialize((type) {
+        switch (type) {
+          case 'action_add':
+            showAddSheet();
+            break;
+          default:
+            break;
+        }
+      });
+
+      quickActions.setShortcutItems(quickActionShortcuts);
+    });
     super.initState();
   }
 
@@ -96,7 +113,7 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
   /// Create/Update bottom sheet
   void showAddSheet({TodoModel? todoForUpdate, String? id}) {
     bool isEdit = todoForUpdate != null;
-    showGlassBottomSheet(
+    _bottomSheetFuture ??= showGlassBottomSheet(
       context,
       sheetTitle: isEdit ? Strings.updateYourTask : Strings.addATask,
       maxHeight: getScreenHeight(context) * 0.5,
@@ -226,6 +243,7 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
                                 } else {
                                   createNewTodo();
                                 }
+                                _bottomSheetFuture = null;
                               } catch (e) {
                                 debugPrint(e.toString());
                                 showErrorToast(context);
@@ -243,6 +261,12 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
           ),
         ),
       ],
+    ).then(
+      (value) => setState(
+        () {
+          _bottomSheetFuture = value;
+        },
+      ),
     );
   }
 

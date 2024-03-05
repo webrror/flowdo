@@ -78,7 +78,7 @@ Future<T?> showGlassBottomSheet<T>(
                                   ),
                                   IconButton(
                                     onPressed: () {
-                                      Navigator.pop(context);
+                                      Navigator.pop(context, null);
                                     },
                                     icon: const FaIcon(
                                       FontAwesomeIcons.xmark,
