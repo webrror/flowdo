@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuthException;
 import 'package:flowdo/common/constants/constants.dart';
+import 'package:flowdo/common/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -89,6 +90,14 @@ class FLToast {
       gravity: ToastGravity.BOTTOM,
       toastDuration: Duration(seconds: toastDurationInS),
       isDismissable: true,
+      positionedToastBuilder: (context, child) {
+        return Positioned(
+          left: 20,
+          right: 20,
+          bottom: getBottomInsets(context) + 105,
+          child: child,
+        );
+      },
     );
   }
 

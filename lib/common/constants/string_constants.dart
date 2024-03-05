@@ -75,9 +75,9 @@ class Strings {
   static const category = "Category";
   static const sort = "Sort";
   static const addNewTask = "Add new task";
-  static const noCompletedTodos = "No completed todos found";
-  static const noPendingTodos = "No pending todos found";
-  static const noTodos = "No todos found";
+  static const noCompletedTodos = "No completed tasks found";
+  static const noPendingTodos = "No pending tasks found";
+  static const noTodos = "No tasks found";
   static const markAsIncomplete = "Mark as incomplete";
   static const markAsComplete = "Mark as complete";
   static const editTask = "Edit task";
