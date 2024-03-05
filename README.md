@@ -9,6 +9,7 @@
 - **Mark as Complete**: Check off tasks as you finish them for a satisfying sense of accomplishment.
 - **Theme Options**: Choose between light and dark themes to match your preferences.
 - **Google Sign-In**: Connect with your Google account for a secure and convenient experience. Access your tasks and updates across all your devices seamlessly.
+- **Quick Add**: Add new tasks directly from your home screen on Android and iOS with Quick Actions feature. Long press on app icon and add away.
 
 ### Screens
 <img src="screens/1.png" height="450"><img src="screens/2.png" height="450">
