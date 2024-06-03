@@ -673,38 +673,25 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
                                       size: 11,
                                     ),
                                   ),
-                                  Text.rich(
-                                    TextSpan(
+                                  if (selectedFilter != FilterOptions.category) ...[
+                                    Text(selectedFilter.name)
+                                  ] else if (selectedCategoryForFilter != null && selectedFilter == FilterOptions.category) ...[
+                                    Row(
                                       children: [
-                                        if (selectedFilter != FilterOptions.category)
-                                          TextSpan(
-                                            text: selectedFilter.name,
-                                          ),
-                                        if (selectedCategoryForFilter != null && selectedFilter == FilterOptions.category) ...[
-                                          WidgetSpan(
-                                            alignment: PlaceholderAlignment.middle,
-                                            child: Row(
-                                              children: [
-                                                const SizedBox(
-                                                  width: 5,
-                                                ),
-                                                CircleAvatar(
-                                                  radius: 4,
-                                                  backgroundColor: selectedCategoryForFilter!.categoryProperties.$2,
-                                                ),
-                                                const SizedBox(
-                                                  width: 8,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          TextSpan(
-                                            text: selectedCategoryForFilter!.categoryProperties.$1,
-                                          ),
-                                        ]
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        CircleAvatar(
+                                          radius: 4,
+                                          backgroundColor: selectedCategoryForFilter!.categoryProperties.$2,
+                                        ),
+                                        const SizedBox(
+                                          width: 8,
+                                        ),
+                                        Text(selectedCategoryForFilter!.categoryProperties.$1)
                                       ],
-                                    ),
-                                  ),
+                                    )
+                                  ],
                                   const Padding(
                                     padding: EdgeInsets.only(left: 8),
                                     child: FaIcon(
