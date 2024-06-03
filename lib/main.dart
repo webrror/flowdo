@@ -53,6 +53,8 @@ class MyApp extends StatelessWidget {
             home: const AuthWrapper(),
             debugShowCheckedModeBanner: false,
             themeMode: value.currentTheme,
+            themeAnimationCurve: Curves.linear,
+            themeAnimationDuration: Durations.medium1,
           );
         },
       ),

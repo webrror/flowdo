@@ -24,7 +24,7 @@ ThemeData getAppTheme(
         scaffoldBackgroundColor: Colors.black,
         segmentedButtonTheme: SegmentedButtonThemeData(
           style: ButtonStyle(
-            backgroundColor: MaterialStateColor.resolveWith(
+            backgroundColor: WidgetStateColor.resolveWith(
               (states) => Colors.white10,
             ),
           ),
@@ -52,7 +52,7 @@ ThemeData getAppTheme(
         colorSchemeSeed: Colors.indigo,
         segmentedButtonTheme: SegmentedButtonThemeData(
           style: ButtonStyle(
-            backgroundColor: MaterialStateColor.resolveWith(
+            backgroundColor: WidgetStateColor.resolveWith(
               (states) => Colors.white10,
             ),
           ),
