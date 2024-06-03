@@ -106,7 +106,7 @@ class Strings {
 class AppInfo {
   static const appName = "Flowdo";
   static const packageName = "com.rejie.flowdo";
-  static const appVersion = 'v1.0.0 Beta 4';
+  static const appVersion = 'v1.0.0';
   static const builtWithFlutter = "Built with Flutter and Firebase";
   static const madeBy = "@webrror";
 }
