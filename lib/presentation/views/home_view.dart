@@ -379,8 +379,8 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
                   fontSize: 13,
                 ),
               ),
-              const Text(
-                AppInfo.builtWithFlutter,
+              Text(
+                AppInfo.getBuiltWithFlutter(),
                 style: TextStyle(
                   fontSize: 13,
                 ),

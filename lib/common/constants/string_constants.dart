@@ -1,3 +1,5 @@
+import 'package:flutter/services.dart';
+
 class DateTimeFormats {
   static const isoFormatUTC = "yyyy-MM-ddTHH:mm:ss";
   static const isoFormatLocal = "yyyy-MM-ddTHH:mm:ss";
@@ -106,7 +108,12 @@ class Strings {
 class AppInfo {
   static const appName = "Flowdo";
   static const packageName = "com.rejie.flowdo";
-  static const appVersion = 'v1.0.0';
+  static const appVersion = 'v1.0.1';
   static const builtWithFlutter = "Built with Flutter and Firebase";
+
+  static getBuiltWithFlutter() {
+    return "Built with Flutter (${FlutterVersion.version}) and Firebase";
+  }
+
   static const madeBy = "@webrror";
 }
