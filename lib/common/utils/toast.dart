@@ -89,8 +89,8 @@ class FLToast {
       child: toast,
       gravity: ToastGravity.BOTTOM,
       toastDuration: Duration(seconds: toastDurationInS),
-      isDismissable: true,
-      positionedToastBuilder: (context, child) {
+      isDismissible: true,
+      positionedToastBuilder: (context, child, toastGravity) {
         return Positioned(
           left: 20,
           right: 20,
