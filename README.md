@@ -36,5 +36,3 @@ https://github.com/webrror/flowdo/assets/65507007/d59a57d6-70c1-47d0-b936-c7398d
   ```
   flutter build apk --split-per-abi
   ``` -->
-
-### Winner of <a href="https://www.zeepalm.com/flutter-challenge">Flutter Challenge by ZEEPALM</a>
