@@ -9,5 +9,26 @@
     "frameworksBackend": {
       "region": "asia-east1"
     }
+  },
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "flowdo-rejie",
+          "appId": "1:398101876266:android:68c701828bd4cbb36fbd53",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "flowdo-rejie",
+          "configurations": {
+            "android": "1:398101876266:android:68c701828bd4cbb36fbd53",
+            "ios": "1:398101876266:ios:b2a7ad86fce0b53b6fbd53",
+            "web": "1:398101876266:web:a8a0fc64c6a4a1326fbd53"
+          }
+        }
+      }
+    }
   }
 }
